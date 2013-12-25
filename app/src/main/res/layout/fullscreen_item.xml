@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+    <de.dynamicflash.helper.TouchImageView
+            android:id="@+id/imageID"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scaleType="fitCenter" android:contentDescription="Touch Image Description"/>
+
+    <TextView
+            style="@style/ImageTitle"     android:layout_alignParentBottom="true"
+            android:text="Image Label" android:id="@+id/labelID"/>
+
+    <ProgressBar  android:id="@+id/progressBarID"
+            style="@style/GenericProgressIndicator" android:layout_centerInParent="true"/>
+
+</RelativeLayout>
