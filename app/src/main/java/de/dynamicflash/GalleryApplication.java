@@ -7,9 +7,11 @@ package de.dynamicflash;
  * Time: 23:58
  */
 
+import android.annotation.TargetApi;
 import android.app.Application;
 import android.content.Context;
 import android.net.http.HttpResponseCache;
+import android.os.Build;
 import android.util.Log;
 
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
@@ -41,6 +43,7 @@ public class GalleryApplication extends Application {
 
     private List<Photo> currentPhotos;
 
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public void onCreate() {
         super.onCreate();
@@ -49,8 +52,8 @@ public class GalleryApplication extends Application {
         File cacheDir = StorageUtils.getCacheDirectory(context);
 
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-                .cacheInMemory(true)
-                .cacheOnDisc(true)
+                .cacheInMemory()
+                .cacheOnDisc()
                 .build();
 
         // Create global configuration and initialize ImageLoader with this configuration

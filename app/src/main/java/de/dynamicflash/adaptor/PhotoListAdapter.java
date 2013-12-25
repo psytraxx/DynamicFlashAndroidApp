@@ -61,23 +61,22 @@ public class PhotoListAdapter extends ArrayAdapter<Photo> {
             final String uri =  AppConstant.BASE_URL + String.format(AppConstant.THUMB_IMAGE, item.getFull_path());
             imageLoader.displayImage(uri, holder.image,new ImageLoadingListener() {
                 @Override
-                public void onLoadingStarted(String s, View view) {
-
+                public void onLoadingStarted() {
                     holder.progressBar.setVisibility(View.VISIBLE);
                 }
 
                 @Override
-                public void onLoadingFailed(String s, View view, FailReason failReason) {
+                public void onLoadingFailed(FailReason failReason) {
                     holder.progressBar.setVisibility(View.GONE);
                 }
 
                 @Override
-                public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                public void onLoadingComplete(Bitmap bitmap) {
                     holder.progressBar.setVisibility(View.GONE);
                 }
 
                 @Override
-                public void onLoadingCancelled(String s, View view) {
+                public void onLoadingCancelled() {
                     holder.progressBar.setVisibility(View.GONE);
                 }
             });

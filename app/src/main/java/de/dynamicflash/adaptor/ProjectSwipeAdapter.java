@@ -71,22 +71,22 @@ public class ProjectSwipeAdapter extends PagerAdapter {
         ImageLoader imageLoader = ImageLoader.getInstance();
         imageLoader.displayImage(uri, imgDisplay, new ImageLoadingListener() {
             @Override
-            public void onLoadingStarted(String s, View view) {
+            public void onLoadingStarted() {
                 progressBar.setVisibility(View.VISIBLE);
             }
 
             @Override
-            public void onLoadingFailed(String s, View view, FailReason failReason) {
+            public void onLoadingFailed( FailReason failReason) {
                 progressBar.setVisibility(View.GONE);
             }
 
             @Override
-            public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+            public void onLoadingComplete(Bitmap bitmap) {
                 progressBar.setVisibility(View.GONE);
             }
 
             @Override
-            public void onLoadingCancelled(String s, View view) {
+            public void onLoadingCancelled() {
                 progressBar.setVisibility(View.GONE);
             }
         });
