@@ -20,7 +20,7 @@ import android.widget.ProgressBar;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import de.dynamicflash.GalleryApplication;
 import de.dynamicflash.R;
@@ -61,23 +61,23 @@ public class PhotoListAdapter extends ArrayAdapter<Photo> {
             final String uri =  AppConstant.BASE_URL + String.format(AppConstant.THUMB_IMAGE, item.getFull_path());
             imageLoader.displayImage(uri, holder.image,new ImageLoadingListener() {
                 @Override
-                public void onLoadingStarted() {
+                public void onLoadingStarted(String imageUri, View view) {
                     holder.progressBar.setVisibility(View.VISIBLE);
                 }
 
                 @Override
-                public void onLoadingFailed(FailReason failReason) {
+                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
                     holder.progressBar.setVisibility(View.GONE);
                 }
 
                 @Override
-                public void onLoadingComplete(Bitmap bitmap) {
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                     holder.progressBar.setVisibility(View.GONE);
                 }
 
                 @Override
-                public void onLoadingCancelled() {
-                    holder.progressBar.setVisibility(View.GONE);
+                public void onLoadingCancelled(String imageUri, View view) {
+
                 }
             });
             Log.i(GalleryApplication.TAG, "getThumb: " + uri);

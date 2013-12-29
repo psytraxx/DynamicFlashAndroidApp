@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/DynamicFlashAndroidTest.iml" filepath="$PROJECT_DIR$/DynamicFlashAndroidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Dynamicflash.iml" filepath="$PROJECT_DIR$/Dynamicflash.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
