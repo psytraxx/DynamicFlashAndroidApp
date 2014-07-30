@@ -1,21 +1,21 @@
 package de.dynamicflash.activity;
 
 import android.app.Activity;
-import android.app.LoaderManager;
 import android.content.Intent;
-import android.content.Loader;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import java.util.List;
+import com.android.volley.Request;
+import com.android.volley.Response;
 
 import de.dynamicflash.GalleryApplication;
 import de.dynamicflash.R;
 import de.dynamicflash.adaptor.PhotoListAdapter;
-import de.dynamicflash.loader.PhotoListLoader;
-import de.dynamicflash.model.Photo;
+import de.dynamicflash.helper.AppConstant;
+import de.dynamicflash.helper.GsonRequest;
+import de.dynamicflash.model.PhotoList;
 
 
 /**
@@ -25,7 +25,7 @@ import de.dynamicflash.model.Photo;
  * Time: 18:29
  */
 
-public class PhotoGridJsonActivity extends Activity implements LoaderManager.LoaderCallbacks<List<Photo>> {
+public class PhotoGridJsonActivity extends Activity  {
 
     private PhotoListAdapter adapter;
 
@@ -42,7 +42,20 @@ public class PhotoGridJsonActivity extends Activity implements LoaderManager.Loa
         // setting grid view adapter
         gridView.setAdapter(adapter);
 
-        getLoaderManager().initLoader(0, null, this);
+        final String url = AppConstant.BASE_URL + String.format(AppConstant.ALBUM_LIST_JSON, getIntent().getStringExtra("folder"));
+
+        Response.Listener<PhotoList> listener = new Response.Listener<PhotoList>() {
+
+            @Override
+            public void onResponse(PhotoList response) {
+                adapter.addAll(response);
+                adapter.notifyDataSetChanged();
+                ((GalleryApplication)getApplication()).setCurrentPhotos(response);
+            }
+        };
+        GsonRequest<PhotoList> request = new GsonRequest<PhotoList>(Request.Method.GET,url, listener, PhotoList.class, GalleryApplication.createErrorListener());
+        ((GalleryApplication)getApplication()).getReqQueue().add(request);
+
 
     }
 
@@ -56,22 +69,5 @@ public class PhotoGridJsonActivity extends Activity implements LoaderManager.Loa
         }
     };
 
-
-    @Override
-    public Loader<List<Photo>> onCreateLoader(int i, Bundle bundle) {
-        return new PhotoListLoader(getApplicationContext(),getIntent().getStringExtra("folder"));
-    }
-
-    @Override
-    public void onLoadFinished(Loader<List<Photo>> listLoader, List<Photo> photos) {
-        //use it straight in swipe activity
-        ((GalleryApplication)getApplication()).setCurrentPhotos(photos);
-        adapter.addAll(photos);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<Photo>> listLoader) {
-        adapter.clear();
-    }
 
 }

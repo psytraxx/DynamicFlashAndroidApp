@@ -2,20 +2,20 @@ package de.dynamicflash.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
+import com.android.volley.Request;
+import com.android.volley.Response;
 
+import de.dynamicflash.GalleryApplication;
 import de.dynamicflash.R;
 import de.dynamicflash.adaptor.ProjectSwipeAdapter;
 import de.dynamicflash.helper.AppConstant;
-import de.dynamicflash.loader.PageListLoader;
-import de.dynamicflash.model.Page;
+import de.dynamicflash.helper.GsonRequest;
+import de.dynamicflash.model.PageList;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,7 +23,7 @@ import de.dynamicflash.model.Page;
  * Date: 11/16/13
  * Time: 3:42 PM
  */
-public class ProjectListFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Page>> {
+public class ProjectListFragment extends Fragment {
 
 
     private ProjectSwipeAdapter adapter;
@@ -40,26 +40,21 @@ public class ProjectListFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onStart() {
         super.onStart();
+        final String url = AppConstant.BASE_URL + AppConstant.PROJECT_LIST_JSON;
 
-        getLoaderManager().initLoader(0, null, this);
+        Response.Listener<PageList> listener = new Response.Listener<PageList>() {
+
+            @Override
+            public void onResponse(PageList response) {
+                adapter = new ProjectSwipeAdapter(getActivity().getLayoutInflater(),response);
+                ViewPager viewPager = (ViewPager)  getView().findViewById(R.id.pagerID);
+                viewPager.setAdapter(adapter);
+            }
+        };
+        GsonRequest<PageList> request = new GsonRequest<PageList>(Request.Method.GET,url, listener, PageList.class, GalleryApplication.createErrorListener());
+        ((GalleryApplication)getActivity().getApplication()).getReqQueue().add(request);
     }
 
-    @Override
-    public Loader<List<Page>> onCreateLoader(int i, Bundle bundle) {
-        return new PageListLoader(getActivity().getApplicationContext(),AppConstant.PROJECT_LIST_JSON);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<List<Page>> listLoader, List<Page> pages) {
-        adapter = new ProjectSwipeAdapter(getActivity().getLayoutInflater(),pages);
-        ViewPager viewPager = (ViewPager)  getView().findViewById(R.id.pagerID);
-        viewPager.setAdapter(adapter);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<Page>> listLoader) {
-        adapter = null;
-    }
 
 
 }

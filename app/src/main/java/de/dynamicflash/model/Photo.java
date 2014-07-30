@@ -1,8 +1,5 @@
 package de.dynamicflash.model;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 /**
  * Created with IntelliJ IDEA.
  * User: eric
@@ -12,11 +9,6 @@ import org.json.JSONObject;
 public class Photo {
     private String full_path;
     private String title;
-
-    public Photo(JSONObject jsonObject) throws JSONException {
-        setFull_path(jsonObject.getString("full_path"));
-        setTitle(jsonObject.getString("title"));
-    }
 
     public String getTitle() {
         return title;

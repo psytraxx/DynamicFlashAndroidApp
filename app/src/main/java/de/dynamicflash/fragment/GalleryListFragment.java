@@ -2,22 +2,24 @@ package de.dynamicflash.fragment;
 
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.ListView;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import de.dynamicflash.GalleryApplication;
 import de.dynamicflash.R;
 import de.dynamicflash.activity.PhotoGridJsonActivity;
 import de.dynamicflash.adaptor.GalleryListAdapter;
 import de.dynamicflash.helper.AppConstant;
-import de.dynamicflash.loader.PageListLoader;
+import de.dynamicflash.helper.GsonRequest;
 import de.dynamicflash.model.Page;
+import de.dynamicflash.model.PageList;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,8 +27,7 @@ import de.dynamicflash.model.Page;
  * Date: 10/11/13
  * Time: 11:16
  */
-public class GalleryListFragment extends ListFragment
-        implements LoaderManager.LoaderCallbacks<List<Page>> {
+public class GalleryListFragment extends ListFragment {
 
 
     private List<Page> galleries = new ArrayList<Page>();
@@ -37,7 +38,18 @@ public class GalleryListFragment extends ListFragment
         super.onStart();
         adapter = new GalleryListAdapter(getActivity(), R.layout.gallery_list,galleries);
         setListAdapter(adapter);
-        getLoaderManager().initLoader(0, null, this);
+        final String url = AppConstant.BASE_URL + AppConstant.GALLERY_LIST_JSON;
+
+        Response.Listener<PageList> listener = new Response.Listener<PageList>() {
+
+            @Override
+            public void onResponse(PageList response) {
+                adapter.addAll(response);
+                adapter.notifyDataSetChanged();
+            }
+        };
+        GsonRequest<PageList> request = new GsonRequest<PageList>(Request.Method.GET,url, listener, PageList.class, GalleryApplication.createErrorListener());
+        ((GalleryApplication)getActivity().getApplication()).getReqQueue().add(request);
     }
 
      public void onListItemClick(ListView l, View v, int position, long id) {
@@ -50,21 +62,6 @@ public class GalleryListFragment extends ListFragment
              startActivity(i);
          }
 
-    }
-
-    @Override
-    public Loader<List<Page>> onCreateLoader(int i, Bundle bundle) {
-        return new PageListLoader(getActivity().getApplicationContext(), AppConstant.GALLERY_LIST_JSON);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<List<Page>> listLoader, List<Page> galleries) {
-       adapter.addAll(galleries);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<Page>> listLoader) {
-        adapter.clear();
     }
 
 }

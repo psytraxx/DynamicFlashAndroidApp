@@ -1,8 +1,5 @@
 package de.dynamicflash.model;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Date;
 
 /**
@@ -17,7 +14,27 @@ public class Page {
     private String title;
     private String body;
     private String image;
+    private String location;
+
+    public String getFile() {
+        return file;
+    }
+
+    public void setFile(String file) {
+        this.file = file;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    private String file;
     private String url;
+    private Date created;
 
     public Date getCreated() {
         return created;
@@ -25,21 +42,6 @@ public class Page {
 
     public void setCreated(Date created) {
         this.created = created;
-    }
-
-    private Date created;
-
-    public Page(JSONObject jsonObject) throws JSONException {
-        setTitle(jsonObject.getString("title"));
-        setBody(jsonObject.getString("body"));
-        if (jsonObject.has("title"))
-            setFolder(jsonObject.getString("folder"));
-        if (jsonObject.has("image"))
-            setImage(jsonObject.getString("image"));
-        if (jsonObject.has("url"))
-            setUrl(jsonObject.getString("url"));
-        if (jsonObject.has("created"))
-            setCreated(new Date(jsonObject.getLong("created")));
     }
 
     public String getImage() {

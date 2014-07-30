@@ -14,6 +14,10 @@ import android.net.http.HttpResponseCache;
 import android.os.Build;
 import android.util.Log;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -33,6 +37,10 @@ public class GalleryApplication extends Application {
      */
     public static final String TAG = GalleryApplication.class.getName();
 
+    public RequestQueue getReqQueue() {
+        return reqQueue;
+    }
+
     public List<Photo> getCurrentPhotos() {
         return currentPhotos;
     }
@@ -43,17 +51,21 @@ public class GalleryApplication extends Application {
 
     private List<Photo> currentPhotos;
 
+    private RequestQueue reqQueue;
+
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public void onCreate() {
         super.onCreate();
 
+        //create request queue
+        reqQueue = Volley.newRequestQueue(this);
         Context context = getApplicationContext();
         File cacheDir = StorageUtils.getCacheDirectory(context);
 
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-                .cacheInMemory()
-                .cacheOnDisc()
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
                 .build();
 
         // Create global configuration and initialize ImageLoader with this configuration
@@ -61,7 +73,7 @@ public class GalleryApplication extends Application {
                 .defaultDisplayImageOptions(defaultOptions)
                 .memoryCacheExtraOptions(480, 800)
                 .threadPoolSize(4) // default
-                .discCache(new UnlimitedDiscCache(cacheDir))
+                .diskCache(new UnlimitedDiscCache(cacheDir))
                 .build();
 
         ImageLoader.getInstance().init(config);
@@ -77,6 +89,16 @@ public class GalleryApplication extends Application {
         }
 
 
+    }
+
+
+    public static Response.ErrorListener createErrorListener() {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "Error Response code: " + error.getMessage());
+            }
+        };
     }
 
 }
