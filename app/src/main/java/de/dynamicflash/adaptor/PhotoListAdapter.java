@@ -29,8 +29,8 @@ import de.dynamicflash.model.Photo;
 
 public class PhotoListAdapter extends ArrayAdapter<Photo> {
 
-    private Context context;
-    private int resource;
+    private final Context context;
+    private final int resource;
 
     public PhotoListAdapter(Context context, int resource) {
 

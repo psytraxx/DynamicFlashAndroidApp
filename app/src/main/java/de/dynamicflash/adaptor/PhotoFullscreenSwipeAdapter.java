@@ -24,8 +24,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
-import java.util.List;
-
 import de.dynamicflash.GalleryApplication;
 import de.dynamicflash.R;
 import de.dynamicflash.helper.AppConstant;
@@ -33,19 +31,19 @@ import de.dynamicflash.model.Photo;
 
 public class PhotoFullscreenSwipeAdapter extends PagerAdapter {
 
-    private Activity _activity;
-    private List<Photo> photos;
+    private final Activity _activity;
+    private final Photo[] photos;
 
     // constructor
     public PhotoFullscreenSwipeAdapter(Activity activity,
-                                       List<Photo> photos) {
+                                       Photo[] photos) {
         this._activity = activity;
         this.photos = photos;
     }
 
     @Override
     public int getCount() {
-        return this.photos.size();
+        return this.photos.length;
     }
 
     @Override
@@ -66,7 +64,7 @@ public class PhotoFullscreenSwipeAdapter extends PagerAdapter {
         TextView label = (TextView) viewLayout.findViewById(R.id.labelID);
         final ProgressBar progressBar = (ProgressBar) viewLayout.findViewById(R.id.progressBarID);
 
-        Photo photo = photos.get(position);
+        Photo photo = photos[position];
 
         if (photo.getTitle().isEmpty()) {
             label.setVisibility(View.GONE);

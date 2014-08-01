@@ -46,13 +46,18 @@ public class GalleryListAdapter extends ArrayAdapter<Page> {
 
         Page page = getItem(position);
 
+        assert page != null;
         holder.title.setText(page.getTitle());
-        holder.text.setText(Html.fromHtml(page.getBody()));
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            holder.text.setText(Html.fromHtml(page.getBody(),Html.FROM_HTML_MODE_COMPACT));
+        } else {
+            holder.text.setText(Html.fromHtml(page.getBody()));
+        }
 
         return row;
     }
 
-    static class ViewHolder {
+    private static class ViewHolder {
 
         TextView title;
         TextView text;

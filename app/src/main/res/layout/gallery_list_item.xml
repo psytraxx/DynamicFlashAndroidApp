@@ -3,6 +3,7 @@
 
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
+     android:layout_margin="5dp"
              android:layout_height="match_parent">
     <TableRow >
 
@@ -13,7 +14,8 @@
 
                 android:text="Gallery Title" android:textStyle="bold"
                 android:typeface="sans"
-                android:padding="5dp" android:textSize="18dp" android:textColor="@android:color/white"/>
+            android:textSize="20sp" android:textColor="@android:color/secondary_text_light"
+            android:padding="4sp" />
     </TableRow>
     <TableRow >
 
@@ -25,9 +27,8 @@
                 android:typeface="sans"
                 android:maxLines="3"
                 android:lines="3"
-                android:singleLine="false"
                 android:layout_weight="1.0"
-                android:padding="5dp" android:gravity="left"/>
+                android:padding="4sp" android:gravity="start"/>
     </TableRow>
 </TableLayout>
 

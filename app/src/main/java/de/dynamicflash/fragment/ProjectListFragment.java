@@ -1,7 +1,7 @@
 package de.dynamicflash.fragment;
 
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +15,7 @@ import de.dynamicflash.R;
 import de.dynamicflash.adaptor.ProjectSwipeAdapter;
 import de.dynamicflash.helper.AppConstant;
 import de.dynamicflash.helper.GsonRequest;
-import de.dynamicflash.model.PageList;
+import de.dynamicflash.model.Page;
 
 /**
  * Created with IntelliJ IDEA.
@@ -42,16 +42,16 @@ public class ProjectListFragment extends Fragment {
         super.onStart();
         final String url = AppConstant.BASE_URL + AppConstant.PROJECT_LIST_JSON;
 
-        Response.Listener<PageList> listener = new Response.Listener<PageList>() {
+        Response.Listener<Page[]> listener = new Response.Listener<Page[]>() {
 
             @Override
-            public void onResponse(PageList response) {
+            public void onResponse(Page[] response) {
                 adapter = new ProjectSwipeAdapter(getActivity().getLayoutInflater(),response);
-                ViewPager viewPager = (ViewPager)  getView().findViewById(R.id.pagerID);
+                ViewPager viewPager = (ViewPager) getView().findViewById(R.id.pagerID);
                 viewPager.setAdapter(adapter);
             }
         };
-        GsonRequest<PageList> request = new GsonRequest<PageList>(Request.Method.GET,url, listener, PageList.class, GalleryApplication.createErrorListener());
+        GsonRequest<Page[]> request = new GsonRequest<>(Request.Method.GET, url, listener, Page[].class, GalleryApplication.createErrorListener());
         ((GalleryApplication)getActivity().getApplication()).getReqQueue().add(request);
     }
 

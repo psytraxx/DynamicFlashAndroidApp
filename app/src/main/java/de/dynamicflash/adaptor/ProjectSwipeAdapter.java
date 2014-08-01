@@ -2,6 +2,7 @@ package de.dynamicflash.adaptor;
 
 import android.graphics.Bitmap;
 import android.support.v4.view.PagerAdapter;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +16,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
-import java.util.List;
-
 import de.dynamicflash.GalleryApplication;
 import de.dynamicflash.R;
 import de.dynamicflash.helper.AppConstant;
@@ -29,17 +28,17 @@ import de.dynamicflash.model.Page;
  * Time: 4:00 PM
  */
 public class ProjectSwipeAdapter extends PagerAdapter {
-    private List<Page> pages;
-    private LayoutInflater inflater;
+    private final Page[] pages;
+    private final LayoutInflater inflater;
 
-    public ProjectSwipeAdapter(LayoutInflater inflater, List<Page> pages) {
+    public ProjectSwipeAdapter(LayoutInflater inflater, Page[] pages) {
         this.pages = pages;
        this.inflater = inflater;
     }
 
     @Override
     public int getCount() {
-        return pages.size();
+        return pages.length;
     }
 
     @Override
@@ -54,7 +53,7 @@ public class ProjectSwipeAdapter extends PagerAdapter {
         TextView description = (TextView) viewLayout.findViewById(R.id.descriptionID);
         final ProgressBar progressBar = (ProgressBar) viewLayout.findViewById(R.id.progressBarID);
 
-        Page project = pages.get(position);
+        Page project = pages[position];
 
         if (project.getTitle().isEmpty()) {
             label.setVisibility(View.GONE);
@@ -62,7 +61,12 @@ public class ProjectSwipeAdapter extends PagerAdapter {
             label.setText(project.getTitle());
         }
 
-        description.setText(project.getBody());
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            description.setText(Html.fromHtml(project.getBody(),Html.FROM_HTML_MODE_COMPACT));
+        } else {
+            description.setText(Html.fromHtml(project.getBody()));
+        }
+
 
         final String uri = AppConstant.BASE_URL + '/' + project.getImage();
 

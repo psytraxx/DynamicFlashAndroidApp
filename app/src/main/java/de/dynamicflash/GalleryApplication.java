@@ -18,7 +18,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
-import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
+import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -26,7 +26,6 @@ import com.nostra13.universalimageloader.utils.StorageUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import de.dynamicflash.model.Photo;
 
@@ -41,15 +40,15 @@ public class GalleryApplication extends Application {
         return reqQueue;
     }
 
-    public List<Photo> getCurrentPhotos() {
+    public Photo[] getCurrentPhotos() {
         return currentPhotos;
     }
 
-    public void setCurrentPhotos(List<Photo> currentPhotos) {
+    public void setCurrentPhotos(Photo[] currentPhotos) {
         this.currentPhotos = currentPhotos;
     }
 
-    private List<Photo> currentPhotos;
+    private Photo[] currentPhotos;
 
     private RequestQueue reqQueue;
 
@@ -73,7 +72,7 @@ public class GalleryApplication extends Application {
                 .defaultDisplayImageOptions(defaultOptions)
                 .memoryCacheExtraOptions(480, 800)
                 .threadPoolSize(4) // default
-                .diskCache(new UnlimitedDiscCache(cacheDir))
+                .diskCache(new UnlimitedDiskCache(cacheDir ))
                 .build();
 
         ImageLoader.getInstance().init(config);
