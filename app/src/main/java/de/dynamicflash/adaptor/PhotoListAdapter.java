@@ -9,8 +9,7 @@ package de.dynamicflash.adaptor;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.util.Log;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +17,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
-import de.dynamicflash.GalleryApplication;
 import de.dynamicflash.R;
-import de.dynamicflash.helper.AppConstant;
 import de.dynamicflash.model.Photo;
 
 public class PhotoListAdapter extends ArrayAdapter<Photo> {
@@ -32,16 +28,16 @@ public class PhotoListAdapter extends ArrayAdapter<Photo> {
     private final Context context;
     private final int resource;
 
-    public PhotoListAdapter(Context context, int resource) {
+    public PhotoListAdapter(Context context) {
 
-        super(context, resource);
-        this.resource = resource;
+        super(context, R.layout.photo_grid_item);
+        this.resource = R.layout.photo_grid_item;
         this.context = context;
     }
 
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View row = convertView;
         final ViewHolder holder;
         if (row == null) {
@@ -57,30 +53,19 @@ public class PhotoListAdapter extends ArrayAdapter<Photo> {
 
         if (getCount() > position) {
             Photo item = getItem(position);
-            ImageLoader imageLoader = ImageLoader.getInstance();
-            final String uri =  AppConstant.BASE_URL + String.format(AppConstant.THUMB_IMAGE, item.getFull_path());
-            imageLoader.displayImage(uri, holder.image,new ImageLoadingListener() {
-                @Override
-                public void onLoadingStarted(String imageUri, View view) {
-                    holder.progressBar.setVisibility(View.VISIBLE);
-                }
+            assert item != null;
 
+            Picasso.with(parent.getContext()).load(item.getThumb_path()).into(holder.image, new Callback() {
                 @Override
-                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                public void onSuccess() {
                     holder.progressBar.setVisibility(View.GONE);
                 }
 
                 @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                public void onError() {
                     holder.progressBar.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onLoadingCancelled(String imageUri, View view) {
-
                 }
             });
-            Log.i(GalleryApplication.TAG, "getThumb: " + uri);
         }
 
         return row;

@@ -21,14 +21,4 @@ public class AppConstant {
      */
     public static final String ALBUM_LIST_JSON =  "/json/album/%s";
 
-    /**
-     *     http://de.dynamicflash.de/media/cache/thumb_145/BangkokBaliLombok/IMG_0863.jpg
-     */
-    public static final String THUMB_IMAGE =  "/media/cache/resolve/thumb_photo_320/%s";
-
-    /**
-     *     http://de.dynamicflash.de/media/cache/full_1024/BangkokBaliLombok/IMG_0694.jpg
-     */
-    public static final String FULL_IMAGE =  "/media/cache/resolve/thumb_photo_1280/%s";
-
 }

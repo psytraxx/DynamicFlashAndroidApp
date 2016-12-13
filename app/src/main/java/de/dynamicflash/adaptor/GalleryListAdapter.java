@@ -2,13 +2,10 @@ package de.dynamicflash.adaptor;
 
 import android.content.Context;
 import android.text.Html;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
-import java.util.List;
 
 import de.dynamicflash.R;
 import de.dynamicflash.model.Page;
@@ -21,8 +18,8 @@ import de.dynamicflash.model.Page;
  */
 public class GalleryListAdapter extends ArrayAdapter<Page> {
 
-    public GalleryListAdapter(Context context, int resource,List<Page> list) {
-        super(context, resource,list);
+    public GalleryListAdapter(Context context, Page[] list) {
+        super(context, R.layout.gallery_list,list);
     }
 
     @Override
@@ -31,8 +28,7 @@ public class GalleryListAdapter extends ArrayAdapter<Page> {
         ViewHolder holder;
         if (row == null) {
 
-            LayoutInflater vi = LayoutInflater.from(getContext());
-            row = vi.inflate(R.layout.gallery_list_item, null);
+            row = View.inflate(getContext(), R.layout.gallery_list_item, null);
 
             holder = new ViewHolder();
             holder.title = (TextView) row.findViewById(R.id.titleID);

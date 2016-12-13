@@ -1,20 +1,18 @@
 package de.dynamicflash.fragment;
 
 import android.app.Fragment;
+import android.app.LoaderManager;
+import android.content.Loader;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-
-import de.dynamicflash.GalleryApplication;
 import de.dynamicflash.R;
 import de.dynamicflash.adaptor.ProjectSwipeAdapter;
 import de.dynamicflash.helper.AppConstant;
-import de.dynamicflash.helper.GsonRequest;
+import de.dynamicflash.helper.PageLoader;
 import de.dynamicflash.model.Page;
 
 /**
@@ -23,11 +21,7 @@ import de.dynamicflash.model.Page;
  * Date: 11/16/13
  * Time: 3:42 PM
  */
-public class ProjectListFragment extends Fragment {
-
-
-    private ProjectSwipeAdapter adapter;
-
+public class ProjectListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Page[]> {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,25 +30,29 @@ public class ProjectListFragment extends Fragment {
         return inflater.inflate(R.layout.viewpager, container, false);
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
-        final String url = AppConstant.BASE_URL + AppConstant.PROJECT_LIST_JSON;
-
-        Response.Listener<Page[]> listener = new Response.Listener<Page[]>() {
-
-            @Override
-            public void onResponse(Page[] response) {
-                adapter = new ProjectSwipeAdapter(getActivity().getLayoutInflater(),response);
-                ViewPager viewPager = (ViewPager) getView().findViewById(R.id.pagerID);
-                viewPager.setAdapter(adapter);
-            }
-        };
-        GsonRequest<Page[]> request = new GsonRequest<>(Request.Method.GET, url, listener, Page[].class, GalleryApplication.createErrorListener());
-        ((GalleryApplication)getActivity().getApplication()).getReqQueue().add(request);
+        getLoaderManager().initLoader(0, null,this).forceLoad();
     }
 
 
+    @Override
+    public Loader<Page[]> onCreateLoader(int i, Bundle bundle) {
+        return new PageLoader(getActivity(), 0, AppConstant.PROJECT_LIST_JSON);
+    }
 
+    @Override
+    public void onLoadFinished(Loader<Page[]> loader, Page[] pages) {
+        ProjectSwipeAdapter adapter = new ProjectSwipeAdapter(getActivity().getLayoutInflater(), pages);
+        View view = getView();
+        assert view != null;
+        ViewPager viewPager = (ViewPager) view.findViewById(R.id.pagerID);
+        viewPager.setAdapter(adapter);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Page[]> loader) {
+
+    }
 }

@@ -15,6 +15,9 @@ public class Page {
     private String body;
     private String image;
     private String location;
+    private String file;
+    private String url;
+    private Date created;
 
     public String getFile() {
         return file;
@@ -31,10 +34,6 @@ public class Page {
     public void setLocation(String location) {
         this.location = location;
     }
-
-    private String file;
-    private String url;
-    private Date created;
 
     public Date getCreated() {
         return created;

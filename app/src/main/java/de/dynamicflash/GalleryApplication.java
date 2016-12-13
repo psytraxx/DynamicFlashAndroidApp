@@ -7,27 +7,19 @@ package de.dynamicflash;
  * Time: 23:58
  */
 
-import android.annotation.TargetApi;
 import android.app.Application;
-import android.content.Context;
-import android.net.http.HttpResponseCache;
-import android.os.Build;
-import android.util.Log;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
-import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.jakewharton.picasso.OkHttp3Downloader;
+import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import de.dynamicflash.helper.LoggingInterceptor;
 import de.dynamicflash.model.Photo;
+import okhttp3.Cache;
+import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
 
 public class GalleryApplication extends Application {
 
@@ -35,10 +27,6 @@ public class GalleryApplication extends Application {
      * to avoid loading the same data for the swipe view (is loaded with thumbs for the overview view)
      */
     public static final String TAG = GalleryApplication.class.getName();
-
-    public RequestQueue getReqQueue() {
-        return reqQueue;
-    }
 
     public Photo[] getCurrentPhotos() {
         return currentPhotos;
@@ -50,54 +38,30 @@ public class GalleryApplication extends Application {
 
     private Photo[] currentPhotos;
 
-    private RequestQueue reqQueue;
-
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public void onCreate() {
         super.onCreate();
 
-        //create request queue
-        reqQueue = Volley.newRequestQueue(this);
-        Context context = getApplicationContext();
-        File cacheDir = StorageUtils.getCacheDirectory(context);
+        int cacheSize = 30 * 1024 * 1024; // 10 MiB
+        Cache responseCache = new Cache(getCacheDir(), cacheSize);
 
-        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
+        List<Protocol> protocols = new ArrayList<>();
+        protocols.add(Protocol.HTTP_2);
+        protocols.add(Protocol.HTTP_1_1);
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .protocols(protocols)
+                .cache(responseCache)
+                .addInterceptor(new LoggingInterceptor())
                 .build();
 
-        // Create global configuration and initialize ImageLoader with this configuration
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
-                .defaultDisplayImageOptions(defaultOptions)
-                .memoryCacheExtraOptions(480, 800)
-                .threadPoolSize(4) // default
-                .diskCache(new UnlimitedDiskCache(cacheDir ))
-                .build();
 
-        ImageLoader.getInstance().init(config);
-
-         //init the http cache
-        try {
-            File httpCacheDir = new File(context.getCacheDir(), "http");
-            long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
-                HttpResponseCache.install(httpCacheDir, httpCacheSize);
-        } catch (IOException e) {
-                Log.i(TAG, "HTTP response cache installation failed:" + e);
-
-        }
-
-
+        Picasso.Builder builder = new Picasso.Builder(this);
+        builder.downloader(new OkHttp3Downloader(client));
+        Picasso built = builder.build();
+        built.setIndicatorsEnabled(false);
+        built.setLoggingEnabled(false);
+        Picasso.setSingletonInstance(built);
     }
-
-
-    public static Response.ErrorListener createErrorListener() {
-        return new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "Error Response code: " + error.getMessage());
-            }
-        };
-    }
-
 }
+

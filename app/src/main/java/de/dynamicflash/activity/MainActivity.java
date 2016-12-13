@@ -1,14 +1,13 @@
 package de.dynamicflash.activity;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.view.Menu;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,10 +22,10 @@ import de.dynamicflash.fragment.ProjectListFragment;
  * Created by eric on 01/08/2014.
  * psytraxx@gmail.com
  */
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
-    protected ListView mDrawerList;
-    protected DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private DrawerLayout mDrawerLayout;
     private String[] mDrawerEntries;
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mDrawerTitle;
@@ -50,7 +49,7 @@ public class MainActivity extends Activity {
         mTitle = mDrawerTitle = getTitle();
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
-        final ActionBar actionBar = getActionBar();
+        final ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
@@ -109,14 +108,14 @@ public class MainActivity extends Activity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggls
+        // Pass any configuration change to the drawer toggles
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setTitle(mTitle);
     }
@@ -126,15 +125,6 @@ public class MainActivity extends Activity {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
-    }
-
-    /* Called whenever we call invalidateOptionsMenu() */
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // If the nav drawer is open, hide action items related to the content view
-        //boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-        //menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
-        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override

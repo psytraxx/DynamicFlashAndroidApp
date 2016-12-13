@@ -30,17 +30,17 @@ public class TouchImageView extends ImageView {
     // Remember some things for zooming
     private final PointF last = new PointF();
     private final PointF start = new PointF();
-    final float minScale = 1f;
-    final float maxScale = 3f;
-    float[] m;
+    private float[] m;
 
-    int viewWidth, viewHeight;
-    static final int CLICK = 3;
-    float saveScale = 1f;
-    protected float origWidth, origHeight;
-    int oldMeasuredWidth, oldMeasuredHeight;
+    private int viewWidth;
+    private int viewHeight;
+    private static final int CLICK = 3;
+    private float saveScale = 1f;
+    private float origWidth;
+    private float origHeight;
+    private int oldMeasuredHeight;
 
-    ScaleGestureDetector mScaleDetector;
+    private ScaleGestureDetector mScaleDetector;
 
     public TouchImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -117,6 +117,8 @@ public class TouchImageView extends ImageView {
             float mScaleFactor = detector.getScaleFactor();
             float origScale = saveScale;
             saveScale *= mScaleFactor;
+            float maxScale = 3f;
+            float minScale = 1f;
             if (saveScale > maxScale) {
                 saveScale = maxScale;
                 mScaleFactor = maxScale / origScale;
@@ -138,7 +140,7 @@ public class TouchImageView extends ImageView {
         }
     }
 
-    void fixTrans() {
+    private void fixTrans() {
         matrix.getValues(m);
         float transX = m[Matrix.MTRANS_X];
         float transY = m[Matrix.MTRANS_Y];
@@ -151,7 +153,7 @@ public class TouchImageView extends ImageView {
             matrix.postTranslate(fixTransX, fixTransY);
     }
 
-    float getFixTrans(float trans, float viewSize, float contentSize) {
+    private float getFixTrans(float trans, float viewSize, float contentSize) {
         float minTrans, maxTrans;
 
         if (contentSize <= viewSize) {
@@ -169,7 +171,7 @@ public class TouchImageView extends ImageView {
         return 0;
     }
 
-    float getFixDragTrans(float delta, float viewSize, float contentSize) {
+    private float getFixDragTrans(float delta, float viewSize, float contentSize) {
         if (contentSize <= viewSize) {
             return 0;
         }
@@ -189,7 +191,6 @@ public class TouchImageView extends ImageView {
                 || viewWidth == 0 || viewHeight == 0)
             return;
         oldMeasuredHeight = viewHeight;
-        oldMeasuredWidth = viewWidth;
 
         if (saveScale == 1) {
             // Fit to screen.

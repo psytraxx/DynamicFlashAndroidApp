@@ -9,9 +9,7 @@ package de.dynamicflash.adaptor;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +18,10 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
-import de.dynamicflash.GalleryApplication;
 import de.dynamicflash.R;
-import de.dynamicflash.helper.AppConstant;
 import de.dynamicflash.model.Photo;
 
 public class PhotoFullscreenSwipeAdapter extends PagerAdapter {
@@ -71,33 +66,18 @@ public class PhotoFullscreenSwipeAdapter extends PagerAdapter {
         } else {
             label.setText(photo.getTitle());
         }
-        final String uri = AppConstant.BASE_URL + String.format(AppConstant.FULL_IMAGE, photo.getFull_path());
 
-        Log.i(GalleryApplication.TAG, "getThumb: " + uri);
-
-        ImageLoader imageLoader = ImageLoader.getInstance();
-        imageLoader.displayImage(uri, imgDisplay, new ImageLoadingListener() {
+        Picasso.with(container.getContext()).load(photo.getFull_path()).into(imgDisplay, new Callback() {
             @Override
-            public void onLoadingStarted(String imageUri, View view) {
-                progressBar.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+            public void onSuccess() {
                 progressBar.setVisibility(View.GONE);
             }
 
             @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+            public void onError() {
                 progressBar.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onLoadingCancelled(String imageUri, View view) {
-
             }
         });
-
 
         container.addView(viewLayout);
 

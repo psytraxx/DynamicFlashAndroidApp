@@ -1,7 +1,9 @@
 package de.dynamicflash.fragment;
 
 import android.app.Fragment;
+import android.app.LoaderManager;
 import android.content.Intent;
+import android.content.Loader;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,15 +11,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-
 import de.dynamicflash.GalleryApplication;
 import de.dynamicflash.R;
 import de.dynamicflash.activity.PhotoFullscreenSwipeActivity;
 import de.dynamicflash.adaptor.PhotoListAdapter;
-import de.dynamicflash.helper.AppConstant;
-import de.dynamicflash.helper.GsonRequest;
+import de.dynamicflash.helper.PhotoLoader;
 import de.dynamicflash.model.Photo;
 
 
@@ -28,7 +26,7 @@ import de.dynamicflash.model.Photo;
  * Time: 18:29
  */
 
-public class PhotoGridFragment extends Fragment {
+public class PhotoGridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Photo[]> {
 
     private PhotoListAdapter adapter;
 
@@ -44,8 +42,6 @@ public class PhotoGridFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        adapter = new PhotoListAdapter(getActivity(), R.layout.photo_grid_item);
-
         GridView view = (GridView) getView();
         if (view == null) {
             return;
@@ -53,23 +49,10 @@ public class PhotoGridFragment extends Fragment {
         view.setOnItemClickListener(itemClickListener);
 
         // setting grid view adapter
+        adapter = new PhotoListAdapter(getActivity());
         view.setAdapter(adapter);
 
-        final String url = AppConstant.BASE_URL + String.format(AppConstant.ALBUM_LIST_JSON, getArguments().getString("folder"));
-
-        final GalleryApplication application = (GalleryApplication) getActivity().getApplication();
-
-        Response.Listener<Photo[]> listener = new Response.Listener<Photo[]>() {
-
-            @Override
-            public void onResponse(Photo[] response) {
-                adapter.addAll(response);
-                adapter.notifyDataSetChanged();
-                application.setCurrentPhotos(response);
-            }
-        };
-        GsonRequest<Photo[]> request = new GsonRequest<>(Request.Method.GET,url, listener, Photo[].class, GalleryApplication.createErrorListener());
-        application.getReqQueue().add(request);
+        getLoaderManager().initLoader(0, null,this).forceLoad();
 
     }
 
@@ -83,4 +66,21 @@ public class PhotoGridFragment extends Fragment {
         }
     };
 
+    @Override
+    public Loader<Photo[]> onCreateLoader(int i, Bundle bundle) {
+        return new PhotoLoader(getActivity(), getArguments().getString("folder"));
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Photo[]> loader, Photo[] photos) {
+        final GalleryApplication application = (GalleryApplication) getActivity().getApplication();
+        application.setCurrentPhotos(photos);
+        adapter.addAll(photos);
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Photo[]> loader) {
+
+    }
 }

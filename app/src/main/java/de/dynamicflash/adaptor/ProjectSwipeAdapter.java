@@ -1,9 +1,7 @@
 package de.dynamicflash.adaptor;
 
-import android.graphics.Bitmap;
 import android.support.v4.view.PagerAdapter;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +10,9 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
-import de.dynamicflash.GalleryApplication;
 import de.dynamicflash.R;
 import de.dynamicflash.helper.AppConstant;
 import de.dynamicflash.model.Page;
@@ -67,32 +63,17 @@ public class ProjectSwipeAdapter extends PagerAdapter {
             description.setText(Html.fromHtml(project.getBody()));
         }
 
-
         final String uri = AppConstant.BASE_URL + '/' + project.getImage();
 
-        Log.i(GalleryApplication.TAG, "getImage: " + uri);
-
-        ImageLoader imageLoader = ImageLoader.getInstance();
-        imageLoader.displayImage(uri, imgDisplay, new ImageLoadingListener() {
-
+        Picasso.with(container.getContext()).load(uri).into(imgDisplay, new Callback() {
             @Override
-            public void onLoadingStarted(String imageUri, View view) {
-                progressBar.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+            public void onSuccess() {
                 progressBar.setVisibility(View.GONE);
             }
 
             @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+            public void onError() {
                 progressBar.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onLoadingCancelled(String imageUri, View view) {
-
             }
         });
 
