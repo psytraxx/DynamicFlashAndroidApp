@@ -1,12 +1,5 @@
 package de.dynamicflash.adaptor;
 
-/**
- * Created with IntelliJ IDEA.
- * User: eric
- * Date: 09/11/13
- * Time: 18:28
- */
-
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -36,6 +29,7 @@ public class PhotoListAdapter extends ArrayAdapter<Photo> {
     }
 
 
+    @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View row = convertView;
@@ -44,8 +38,8 @@ public class PhotoListAdapter extends ArrayAdapter<Photo> {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             row = inflater.inflate(resource, parent, false);
             holder = new ViewHolder();
-            holder.image = (ImageView) row.findViewById(R.id.imageID);
-            holder.progressBar = (ProgressBar) row.findViewById(R.id.progressBarID);
+            holder.image = row.findViewById(R.id.imageID);
+            holder.progressBar = row.findViewById(R.id.progressBarID);
             row.setTag(holder);
         } else {
             holder = (ViewHolder) row.getTag();

@@ -44,10 +44,10 @@ public class ProjectSwipeAdapter extends PagerAdapter {
                 false);
 
 
-        ImageView imgDisplay = (ImageView) viewLayout.findViewById(R.id.imageID);
-        TextView label = (TextView) viewLayout.findViewById(R.id.labelID);
-        TextView description = (TextView) viewLayout.findViewById(R.id.descriptionID);
-        final ProgressBar progressBar = (ProgressBar) viewLayout.findViewById(R.id.progressBarID);
+        ImageView imgDisplay = viewLayout.findViewById(R.id.imageID);
+        TextView label = viewLayout.findViewById(R.id.labelID);
+        TextView description = viewLayout.findViewById(R.id.descriptionID);
+        final ProgressBar progressBar = viewLayout.findViewById(R.id.progressBarID);
 
         Page project = pages[position];
 

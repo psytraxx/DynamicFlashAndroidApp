@@ -1,6 +1,7 @@
 package de.dynamicflash.adaptor;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +23,9 @@ public class GalleryListAdapter extends ArrayAdapter<Page> {
         super(context, R.layout.gallery_list,list);
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View row = convertView;
         ViewHolder holder;
         if (row == null) {
@@ -31,8 +33,8 @@ public class GalleryListAdapter extends ArrayAdapter<Page> {
             row = View.inflate(getContext(), R.layout.gallery_list_item, null);
 
             holder = new ViewHolder();
-            holder.title = (TextView) row.findViewById(R.id.titleID);
-            holder.text = (TextView) row.findViewById(R.id.textID);
+            holder.title = row.findViewById(R.id.titleID);
+            holder.text = row.findViewById(R.id.textID);
 
             row.setTag(holder);
 

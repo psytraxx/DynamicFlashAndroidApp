@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.widget.ImageView;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,7 +16,7 @@ import android.widget.ImageView;
  * Date: 09/11/13
  * Time: 19:58
  */
-public class TouchImageView extends ImageView {
+public class TouchImageView extends android.support.v7.widget.AppCompatImageView {
 
     private Matrix matrix;
 

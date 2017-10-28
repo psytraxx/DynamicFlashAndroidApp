@@ -1,12 +1,5 @@
 package de.dynamicflash;
 
-/**
- * Created with IntelliJ IDEA.
- * User: eric
- * Date: 09/11/13
- * Time: 23:58
- */
-
 import android.app.Application;
 
 import com.jakewharton.picasso.OkHttp3Downloader;

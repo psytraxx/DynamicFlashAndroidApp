@@ -47,7 +47,7 @@ public class ProjectListFragment extends Fragment implements LoaderManager.Loade
         ProjectSwipeAdapter adapter = new ProjectSwipeAdapter(getActivity().getLayoutInflater(), pages);
         View view = getView();
         assert view != null;
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.pagerID);
+        ViewPager viewPager = view.findViewById(R.id.pagerID);
         viewPager.setAdapter(adapter);
     }
 

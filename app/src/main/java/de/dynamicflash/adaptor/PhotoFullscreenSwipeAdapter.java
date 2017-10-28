@@ -1,12 +1,5 @@
 package de.dynamicflash.adaptor;
 
-/**
- * Created with IntelliJ IDEA.
- * User: eric
- * Date: 09/11/13
- * Time: 18:43
- */
-
 import android.app.Activity;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
@@ -51,13 +44,14 @@ public class PhotoFullscreenSwipeAdapter extends PagerAdapter {
 
         LayoutInflater inflater = (LayoutInflater) _activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        assert inflater != null;
         View viewLayout = inflater.inflate(R.layout.fullscreen_item, container,
                 false);
 
 
-        ImageView imgDisplay = (ImageView) viewLayout.findViewById(R.id.imageID);
-        TextView label = (TextView) viewLayout.findViewById(R.id.labelID);
-        final ProgressBar progressBar = (ProgressBar) viewLayout.findViewById(R.id.progressBarID);
+        ImageView imgDisplay = viewLayout.findViewById(R.id.imageID);
+        TextView label = viewLayout.findViewById(R.id.labelID);
+        final ProgressBar progressBar = viewLayout.findViewById(R.id.progressBarID);
 
         Photo photo = photos[position];
 
