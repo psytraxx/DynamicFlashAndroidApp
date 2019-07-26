@@ -2,8 +2,9 @@ package de.dynamicflash.adaptor;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v4.view.PagerAdapter;
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.PagerAdapter;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,14 +64,14 @@ public class PhotoFullscreenSwipeAdapter extends PagerAdapter {
             label.setText(photo.getTitle());
         }
 
-        Picasso.with(container.getContext()).load(photo.getFull_path()).into(imgDisplay, new Callback() {
+        Picasso.get().load(photo.getFull_path()).into(imgDisplay, new Callback() {
             @Override
             public void onSuccess() {
                 progressBar.setVisibility(View.GONE);
             }
 
             @Override
-            public void onError() {
+            public void onError(Exception ex) {
                 progressBar.setVisibility(View.GONE);
             }
         });

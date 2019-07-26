@@ -2,7 +2,7 @@ package de.dynamicflash.adaptor;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,14 +49,14 @@ public class PhotoListAdapter extends ArrayAdapter<Photo> {
             Photo item = getItem(position);
             assert item != null;
 
-            Picasso.with(parent.getContext()).load(item.getThumb_path()).into(holder.image, new Callback() {
+            Picasso.get().load(item.getThumb_path()).into(holder.image, new Callback() {
                 @Override
                 public void onSuccess() {
                     holder.progressBar.setVisibility(View.GONE);
                 }
 
                 @Override
-                public void onError() {
+                public void onError(Exception ex) {
                     holder.progressBar.setVisibility(View.GONE);
                 }
             });

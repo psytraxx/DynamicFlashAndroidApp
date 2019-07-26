@@ -10,13 +10,15 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 
+import androidx.appcompat.widget.AppCompatImageView;
+
 /**
  * Created with IntelliJ IDEA.
  * User: eric
  * Date: 09/11/13
  * Time: 19:58
  */
-public class TouchImageView extends android.support.v7.widget.AppCompatImageView {
+public class TouchImageView extends AppCompatImageView {
 
     private Matrix matrix;
 

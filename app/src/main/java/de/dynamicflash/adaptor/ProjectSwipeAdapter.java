@@ -1,7 +1,8 @@
 package de.dynamicflash.adaptor;
 
-import android.support.annotation.NonNull;
-import android.support.v4.view.PagerAdapter;
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.PagerAdapter;
+
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,14 +68,14 @@ public class ProjectSwipeAdapter extends PagerAdapter {
 
         final String uri = AppConstant.BASE_URL + '/' + project.getImage();
 
-        Picasso.with(container.getContext()).load(uri).into(imgDisplay, new Callback() {
+        Picasso.get().load(uri).into(imgDisplay, new Callback() {
             @Override
             public void onSuccess() {
                 progressBar.setVisibility(View.GONE);
             }
 
             @Override
-            public void onError() {
+            public void onError(Exception ex) {
                 progressBar.setVisibility(View.GONE);
             }
         });
