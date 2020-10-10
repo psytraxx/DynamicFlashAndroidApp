@@ -12,7 +12,7 @@ public class Page {
 
     private String folder;
     private String title;
-    private String body;
+    private String description;
     private String image;
     private String location;
     private String file;
@@ -59,12 +59,12 @@ public class Page {
         this.url = url;
     }
 
-    public String getBody() {
-        return body;
+    public String getDescription() {
+        return description;
     }
 
-    public void setBody(String body) {
-        this.body = body;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getFolder() {
