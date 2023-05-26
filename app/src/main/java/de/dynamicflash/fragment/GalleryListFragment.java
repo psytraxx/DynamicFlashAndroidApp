@@ -37,18 +37,7 @@ public class GalleryListFragment extends ListFragment implements AbsListView.OnS
         super.onStart();
         setListAdapter(new GalleryListAdapter(getActivity(), new Page[0]));
 
-        Call<Page[]> project = HttpClient.getInstance().getApi().getGalleries(currentPage, MAX_RESULTS);
-        project.enqueue(new Callback<Page[]>() {
-            @Override
-            public void onResponse(Call<Page[]> call, Response<Page[]> response) {
-                setListAdapter(new GalleryListAdapter(getActivity(), response.body()));
-            }
-
-            @Override
-            public void onFailure(Call<Page[]> call, Throwable t) {
-                call.cancel();
-            }
-        });
+        loadCurrentPage();
     }
 
     public void onListItemClick(ListView l, @NonNull View v, int position, long id) {
@@ -92,21 +81,24 @@ public class GalleryListFragment extends ListFragment implements AbsListView.OnS
             // load 3 (4-1) items before we reach the end of the list
             if (listView.getLastVisiblePosition() >= listView.getCount() - 4) {
                 currentPage++;
-                Call<Page[]> project = HttpClient.getInstance().getApi().getGalleries(currentPage, MAX_RESULTS);
-                project.enqueue(new Callback<Page[]>() {
-                    @Override
-                    public void onResponse(Call<Page[]> call, Response<Page[]> response) {
-                        setListAdapter(new GalleryListAdapter(getActivity(), response.body()));
-                    }
-
-                    @Override
-                    public void onFailure(Call<Page[]> call, Throwable t) {
-                        call.cancel();
-                    }
-                });
-
+                loadCurrentPage();
             }
         }
+    }
+
+    private void loadCurrentPage() {
+        Call<Page[]> project = HttpClient.getInstance().getApi().getGalleries(currentPage, MAX_RESULTS);
+        project.enqueue(new Callback<Page[]>() {
+            @Override
+            public void onResponse(Call<Page[]> call, Response<Page[]> response) {
+                setListAdapter(new GalleryListAdapter(getActivity(), response.body()));
+            }
+
+            @Override
+            public void onFailure(Call<Page[]> call, Throwable t) {
+                call.cancel();
+            }
+        });
     }
 
     @Override
