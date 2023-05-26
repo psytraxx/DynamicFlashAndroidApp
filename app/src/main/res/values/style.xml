@@ -11,7 +11,7 @@
         <item name="android:textSize">18sp</item>
         <item name="android:typeface">sans</item>
     </style>
-    <style name="ImageDesciption">
+    <style name="ImageDescription">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">#99000000</item>
@@ -21,10 +21,5 @@
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">14sp</item>
         <item name="android:typeface">sans</item>
-    </style>
-   <style name="GenericProgressIndicator" parent="@android:style/Widget.ProgressBar.Small">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:indeterminate">true</item>
     </style>
 </resources>
