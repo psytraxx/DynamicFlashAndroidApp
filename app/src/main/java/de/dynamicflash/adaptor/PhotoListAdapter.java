@@ -7,12 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import de.dynamicflash.R;
 import de.dynamicflash.model.Photo;
@@ -40,7 +38,6 @@ public class PhotoListAdapter extends ArrayAdapter<Photo> {
             row = inflater.inflate(resource, parent, false);
             holder = new ViewHolder();
             holder.image = row.findViewById(R.id.imageID);
-            holder.progressBar = row.findViewById(R.id.progressBarID);
             row.setTag(holder);
         } else {
             holder = (ViewHolder) row.getTag();
@@ -50,17 +47,9 @@ public class PhotoListAdapter extends ArrayAdapter<Photo> {
             Photo item = getItem(position);
             assert item != null;
 
-            Picasso.get().load(item.getThumb_path()).into(holder.image, new Callback() {
-                @Override
-                public void onSuccess() {
-                    holder.progressBar.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onError(Exception ex) {
-                    holder.progressBar.setVisibility(View.GONE);
-                }
-            });
+            Glide.with(context)
+                    .load(item.getThumb_path())
+                    .into(holder.image);
         }
 
         return row;
@@ -68,6 +57,5 @@ public class PhotoListAdapter extends ArrayAdapter<Photo> {
 
     static class ViewHolder {
         ImageView image;
-        ProgressBar progressBar;
     }
 }

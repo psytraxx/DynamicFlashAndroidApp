@@ -30,7 +30,7 @@ public class PhotoGridActivity extends AppCompatActivity {
 
             String folder = getIntent().getStringExtra("folder");
             Bundle bundle = new Bundle();
-            bundle.putString("folder",folder);
+            bundle.putString("folder", folder);
             fragment.setArguments(bundle);
 
             FragmentManager fragmentManager = getSupportFragmentManager();

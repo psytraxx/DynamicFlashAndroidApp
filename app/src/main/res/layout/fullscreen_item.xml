@@ -13,7 +13,4 @@
             style="@style/ImageTitle"     android:layout_alignParentBottom="true"
             android:text="Image Label" android:id="@+id/labelID"/>
 
-    <ProgressBar  android:id="@+id/progressBarID"
-            style="@style/GenericProgressIndicator" android:layout_centerInParent="true"/>
-
 </RelativeLayout>

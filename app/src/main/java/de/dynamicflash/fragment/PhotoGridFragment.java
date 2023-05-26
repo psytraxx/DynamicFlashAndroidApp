@@ -8,17 +8,17 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
 
 import de.dynamicflash.GalleryApplication;
 import de.dynamicflash.R;
 import de.dynamicflash.activity.PhotoFullscreenSwipeActivity;
 import de.dynamicflash.adaptor.PhotoListAdapter;
-import de.dynamicflash.helper.PhotoLoader;
+import de.dynamicflash.helper.HttpClient;
 import de.dynamicflash.model.Photo;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -28,10 +28,16 @@ import de.dynamicflash.model.Photo;
  * Time: 18:29
  */
 
-public class PhotoGridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Photo[]> {
+public class PhotoGridFragment extends Fragment {
 
+    private final AdapterView.OnItemClickListener itemClickListener = (parent, v, position, id) -> {
+        // on selecting grid view image
+        // launch full screen activity
+        Intent i = new Intent(getActivity().getBaseContext(), PhotoFullscreenSwipeActivity.class);
+        i.putExtra("position", position);
+        startActivity(i);
+    };
     private PhotoListAdapter adapter;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,34 +60,21 @@ public class PhotoGridFragment extends Fragment implements LoaderManager.LoaderC
         adapter = new PhotoListAdapter(getActivity());
         view.setAdapter(adapter);
 
-        LoaderManager.getInstance(this).initLoader(0, null,this).forceLoad();
+        Call<Photo[]> album = HttpClient.getInstance().getApi().getAlbum(getArguments().getString("folder"));
 
-    }
+        album.enqueue(new Callback<Photo[]>() {
+            @Override
+            public void onResponse(Call<Photo[]> call, Response<Photo[]> response) {
+                final GalleryApplication application = (GalleryApplication) getActivity().getApplication();
+                application.setCurrentPhotos(response.body());
+                adapter.addAll(response.body());
+            }
 
-    private final AdapterView.OnItemClickListener itemClickListener = (parent, v, position, id) -> {
-        // on selecting grid view image
-        // launch full screen activity
-        Intent i = new Intent(getActivity().getBaseContext(), PhotoFullscreenSwipeActivity.class);
-        i.putExtra("position", position);
-        startActivity(i);
-    };
-
-    @NonNull
-    @Override
-    public Loader<Photo[]> onCreateLoader(int i, Bundle bundle) {
-        return new PhotoLoader(getActivity(), getArguments().getString("folder"));
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Photo[]> loader, Photo[] data) {
-        final GalleryApplication application = (GalleryApplication) getActivity().getApplication();
-        application.setCurrentPhotos(data);
-        adapter.addAll(data);
-
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Photo[]> loader) {
+            @Override
+            public void onFailure(Call<Photo[]> call, Throwable t) {
+                call.cancel();
+            }
+        });
 
     }
 }
