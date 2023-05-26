@@ -1,8 +1,5 @@
 package de.dynamicflash.adaptor;
 
-import androidx.annotation.NonNull;
-import androidx.viewpager.widget.PagerAdapter;
-
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +8,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.PagerAdapter;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;

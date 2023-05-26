@@ -1,13 +1,15 @@
 package de.dynamicflash.fragment;
 
-import android.app.Fragment;
-import android.app.LoaderManager;
-import android.content.Loader;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 import androidx.viewpager.widget.ViewPager;
 
 import de.dynamicflash.R;
@@ -34,17 +36,19 @@ public class ProjectListFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onStart() {
         super.onStart();
-        getLoaderManager().initLoader(0, null,this).forceLoad();
+
+        LoaderManager.getInstance(this).initLoader(0, null,this).forceLoad();
     }
 
 
+    @NonNull
     @Override
-    public Loader<Page[]> onCreateLoader(int i, Bundle bundle) {
+    public Loader<Page[]> onCreateLoader(int id, @Nullable Bundle args) {
         return new PageLoader(getActivity(), 0, AppConstant.PROJECT_LIST_JSON);
     }
 
     @Override
-    public void onLoadFinished(Loader<Page[]> loader, Page[] pages) {
+    public void onLoadFinished(@NonNull androidx.loader.content.Loader<Page[]> loader, Page[] pages) {
         ProjectSwipeAdapter adapter = new ProjectSwipeAdapter(getActivity().getLayoutInflater(), pages);
         View view = getView();
         assert view != null;
@@ -53,7 +57,7 @@ public class ProjectListFragment extends Fragment implements LoaderManager.Loade
     }
 
     @Override
-    public void onLoaderReset(Loader<Page[]> loader) {
+    public void onLoaderReset(@NonNull androidx.loader.content.Loader<Page[]> loader) {
 
     }
 }

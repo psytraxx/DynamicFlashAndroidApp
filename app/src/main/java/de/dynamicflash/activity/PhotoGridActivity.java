@@ -1,8 +1,10 @@
 package de.dynamicflash.activity;
 
-import android.app.Activity;
-import android.app.FragmentManager;
+
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import de.dynamicflash.R;
 import de.dynamicflash.fragment.PhotoGridFragment;
@@ -15,7 +17,7 @@ import de.dynamicflash.fragment.PhotoGridFragment;
  * Time: 18:29
  */
 
-public class PhotoGridActivity extends Activity  {
+public class PhotoGridActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +33,7 @@ public class PhotoGridActivity extends Activity  {
             bundle.putString("folder",folder);
             fragment.setArguments(bundle);
 
-            FragmentManager fragmentManager = getFragmentManager();
+            FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.grid_holder, fragment).commit();
 
         }

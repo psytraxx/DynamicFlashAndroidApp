@@ -1,15 +1,17 @@
 package de.dynamicflash.fragment;
 
-import android.app.Fragment;
-import android.app.LoaderManager;
 import android.content.Intent;
-import android.content.Loader;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 
 import de.dynamicflash.GalleryApplication;
 import de.dynamicflash.R;
@@ -52,35 +54,34 @@ public class PhotoGridFragment extends Fragment implements LoaderManager.LoaderC
         adapter = new PhotoListAdapter(getActivity());
         view.setAdapter(adapter);
 
-        getLoaderManager().initLoader(0, null,this).forceLoad();
+        LoaderManager.getInstance(this).initLoader(0, null,this).forceLoad();
 
     }
 
-    private final AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
-        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-            // on selecting grid view image
-            // launch full screen activity
-            Intent i = new Intent(getActivity().getBaseContext(), PhotoFullscreenSwipeActivity.class);
-            i.putExtra("position", position);
-            startActivity(i);
-        }
+    private final AdapterView.OnItemClickListener itemClickListener = (parent, v, position, id) -> {
+        // on selecting grid view image
+        // launch full screen activity
+        Intent i = new Intent(getActivity().getBaseContext(), PhotoFullscreenSwipeActivity.class);
+        i.putExtra("position", position);
+        startActivity(i);
     };
 
+    @NonNull
     @Override
     public Loader<Photo[]> onCreateLoader(int i, Bundle bundle) {
         return new PhotoLoader(getActivity(), getArguments().getString("folder"));
     }
 
     @Override
-    public void onLoadFinished(Loader<Photo[]> loader, Photo[] photos) {
+    public void onLoadFinished(@NonNull Loader<Photo[]> loader, Photo[] data) {
         final GalleryApplication application = (GalleryApplication) getActivity().getApplication();
-        application.setCurrentPhotos(photos);
-        adapter.addAll(photos);
+        application.setCurrentPhotos(data);
+        adapter.addAll(data);
 
     }
 
     @Override
-    public void onLoaderReset(Loader<Photo[]> loader) {
+    public void onLoaderReset(@NonNull Loader<Photo[]> loader) {
 
     }
 }

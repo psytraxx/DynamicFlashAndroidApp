@@ -1,7 +1,8 @@
 package de.dynamicflash.helper;
 
-import android.content.AsyncTaskLoader;
 import android.content.Context;
+
+import androidx.loader.content.AsyncTaskLoader;
 
 import com.google.gson.Gson;
 
@@ -45,8 +46,8 @@ public class PhotoLoader extends AsyncTaskLoader<Photo[]> {
                 .url(url)
                 .build();
 
-        try {
-            Response response = client.newCall(request).execute();
+        try (
+            Response response = client.newCall(request).execute()) {
             Gson gson = new Gson();
             return gson.fromJson(response.body().charStream(), Photo[].class);
         } catch (Exception ex) {

@@ -2,6 +2,7 @@ package de.dynamicflash.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+
 import androidx.viewpager.widget.ViewPager;
 
 import de.dynamicflash.GalleryApplication;

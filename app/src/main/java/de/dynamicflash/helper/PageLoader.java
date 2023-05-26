@@ -1,16 +1,13 @@
 package de.dynamicflash.helper;
 
-import android.content.AsyncTaskLoader;
 import android.content.Context;
+
+import androidx.loader.content.AsyncTaskLoader;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -53,19 +50,16 @@ public class PageLoader extends AsyncTaskLoader<Page[]> {
                 .url(url)
                 .build();
 
-        try {
-            Response response = client.newCall(request).execute();
+        try (
+                Response response = client.newCall(request).execute()) {
             // Creates the json object which will manage the information received
             GsonBuilder builder = new GsonBuilder();
 
             // Register an adapter to manage the date types as long values
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
+            builder.registerTypeAdapter(Date.class, (JsonDeserializer<Date>) (json, typeOfT, context) -> new Date(json.getAsJsonPrimitive().getAsLong()));
 
             Gson gson = builder.create();
+            assert response.body() != null;
             return gson.fromJson(response.body().charStream(), Page[].class);
         } catch (Exception ex) {
             return null;

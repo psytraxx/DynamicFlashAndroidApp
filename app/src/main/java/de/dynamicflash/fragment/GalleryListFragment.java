@@ -1,15 +1,18 @@
 package de.dynamicflash.fragment;
 
 
-import android.app.FragmentManager;
-import android.app.ListFragment;
-import android.app.LoaderManager;
 import android.content.Intent;
-import android.content.Loader;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.ListFragment;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 
 import de.dynamicflash.R;
 import de.dynamicflash.activity.PhotoGridActivity;
@@ -24,7 +27,7 @@ import de.dynamicflash.model.Page;
  * Date: 10/11/13
  * Time: 11:16
  */
-public class GalleryListFragment extends ListFragment implements AbsListView.OnScrollListener,LoaderManager.LoaderCallbacks<Page[]> {
+public class GalleryListFragment extends ListFragment implements AbsListView.OnScrollListener, LoaderManager.LoaderCallbacks<Page[]> {
 
     private int currentPage = 0;
 
@@ -32,11 +35,11 @@ public class GalleryListFragment extends ListFragment implements AbsListView.OnS
     public void onStart() {
         super.onStart();
         setListAdapter(new GalleryListAdapter(getActivity(), new Page[0]));
-        getLoaderManager().initLoader(0, null,this).forceLoad();
+        LoaderManager.getInstance(this).initLoader(0, null,this).forceLoad();
 
     }
 
-    public void onListItemClick(ListView l, View v, int position, long id) {
+    public void onListItemClick(ListView l, @NonNull View v, int position, long id) {
         Page selection = (Page) l.getItemAtPosition(position);
 
         if (selection != null) {
@@ -55,7 +58,7 @@ public class GalleryListFragment extends ListFragment implements AbsListView.OnS
 
             } else {
                 //launch fragment
-                FragmentManager fragmentManager = getFragmentManager();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 PhotoGridFragment fragment = new PhotoGridFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("folder",selection.getFolder());
@@ -66,10 +69,8 @@ public class GalleryListFragment extends ListFragment implements AbsListView.OnS
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        // Always call the superclass so it can save the view hierarchy state
-        super.onActivityCreated(savedInstanceState);
-
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         getListView().setOnScrollListener(this);
     }
 
@@ -79,7 +80,7 @@ public class GalleryListFragment extends ListFragment implements AbsListView.OnS
             // load 3 (4-1) items before we reach the end of the list
             if (listView.getLastVisiblePosition() >= listView.getCount() - 4) {
                 currentPage++;
-                getLoaderManager().restartLoader(0, null,this);
+                LoaderManager.getInstance(this).restartLoader(0, null,this);
             }
         }
     }
@@ -89,19 +90,19 @@ public class GalleryListFragment extends ListFragment implements AbsListView.OnS
 
     }
 
-
+    @NonNull
     @Override
     public Loader<Page[]> onCreateLoader(int i, Bundle bundle) {
         return new PageLoader(getActivity(), currentPage, AppConstant.GALLERY_LIST_JSON);
     }
 
     @Override
-    public void onLoadFinished(Loader<Page[]> loader, Page[] pages) {
-        setListAdapter(new GalleryListAdapter(getActivity(), pages));
+    public void onLoadFinished(@NonNull Loader<Page[]> loader, Page[] data) {
+        setListAdapter(new GalleryListAdapter(getActivity(), data));
     }
 
     @Override
-    public void onLoaderReset(Loader<Page[]> loader) {
+    public void onLoaderReset(@NonNull Loader<Page[]> loader) {
 
     }
 }

@@ -17,7 +17,7 @@ public class AppConstant {
     public static final String PROJECT_LIST_JSON =  "/api/projects";
 
     /**
-     * http://de.dynamicflash.de/json/album/BangkokBaliLombok
+     * <a href="http://de.dynamicflash.de/json/album/BangkokBaliLombok">Example</a>
      */
     public static final String ALBUM_LIST_JSON =  "/api/album/%s";
 

@@ -2,6 +2,8 @@ package de.dynamicflash.helper;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import java.io.IOException;
 
 import de.dynamicflash.GalleryApplication;
@@ -13,6 +15,7 @@ import okhttp3.Response;
  * Created by eric on 17/12/16. - all rights reserved
  */
 public class LoggingInterceptor implements Interceptor {
+    @NonNull
     @Override public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
 
