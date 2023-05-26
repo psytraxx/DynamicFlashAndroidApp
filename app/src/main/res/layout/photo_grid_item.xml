@@ -18,7 +18,4 @@
             android:layout_height="150dp">
     </ImageView>
 
-    <ProgressBar  android:id="@+id/progressBarID"
-                  style="@style/GenericProgressIndicator" android:layout_centerInParent="true"/>
-
 </RelativeLayout>

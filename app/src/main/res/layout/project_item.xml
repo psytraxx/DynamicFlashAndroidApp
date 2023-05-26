@@ -19,8 +19,4 @@
             android:text="Text Label" android:id="@+id/descriptionID"
             android:layout_alignParentBottom="true"/>
 
-
-    <ProgressBar  android:id="@+id/progressBarID"
-            style="@style/GenericProgressIndicator" android:layout_centerInParent="true"/>
-
 </RelativeLayout>

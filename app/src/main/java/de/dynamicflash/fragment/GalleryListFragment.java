@@ -11,15 +11,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.ListFragment;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
 
 import de.dynamicflash.R;
 import de.dynamicflash.activity.PhotoGridActivity;
 import de.dynamicflash.adaptor.GalleryListAdapter;
-import de.dynamicflash.helper.AppConstant;
-import de.dynamicflash.helper.PageLoader;
+import de.dynamicflash.helper.HttpClient;
 import de.dynamicflash.model.Page;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,16 +27,28 @@ import de.dynamicflash.model.Page;
  * Date: 10/11/13
  * Time: 11:16
  */
-public class GalleryListFragment extends ListFragment implements AbsListView.OnScrollListener, LoaderManager.LoaderCallbacks<Page[]> {
+public class GalleryListFragment extends ListFragment implements AbsListView.OnScrollListener {
 
+    private static final int MAX_RESULTS = 20;
     private int currentPage = 0;
 
     @Override
     public void onStart() {
         super.onStart();
         setListAdapter(new GalleryListAdapter(getActivity(), new Page[0]));
-        LoaderManager.getInstance(this).initLoader(0, null,this).forceLoad();
 
+        Call<Page[]> project = HttpClient.getInstance().getApi().getGalleries(currentPage, MAX_RESULTS);
+        project.enqueue(new Callback<Page[]>() {
+            @Override
+            public void onResponse(Call<Page[]> call, Response<Page[]> response) {
+                setListAdapter(new GalleryListAdapter(getActivity(), response.body()));
+            }
+
+            @Override
+            public void onFailure(Call<Page[]> call, Throwable t) {
+                call.cancel();
+            }
+        });
     }
 
     public void onListItemClick(ListView l, @NonNull View v, int position, long id) {
@@ -61,7 +73,7 @@ public class GalleryListFragment extends ListFragment implements AbsListView.OnS
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 PhotoGridFragment fragment = new PhotoGridFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("folder",selection.getFolder());
+                bundle.putString("folder", selection.getFolder());
                 fragment.setArguments(bundle);
                 fragmentManager.beginTransaction().replace(R.id.content_right, fragment).commit();
             }
@@ -80,29 +92,25 @@ public class GalleryListFragment extends ListFragment implements AbsListView.OnS
             // load 3 (4-1) items before we reach the end of the list
             if (listView.getLastVisiblePosition() >= listView.getCount() - 4) {
                 currentPage++;
-                LoaderManager.getInstance(this).restartLoader(0, null,this);
+                Call<Page[]> project = HttpClient.getInstance().getApi().getGalleries(currentPage, MAX_RESULTS);
+                project.enqueue(new Callback<Page[]>() {
+                    @Override
+                    public void onResponse(Call<Page[]> call, Response<Page[]> response) {
+                        setListAdapter(new GalleryListAdapter(getActivity(), response.body()));
+                    }
+
+                    @Override
+                    public void onFailure(Call<Page[]> call, Throwable t) {
+                        call.cancel();
+                    }
+                });
+
             }
         }
     }
 
     @Override
     public void onScroll(AbsListView absListView, int i, int i2, int i3) {
-
-    }
-
-    @NonNull
-    @Override
-    public Loader<Page[]> onCreateLoader(int i, Bundle bundle) {
-        return new PageLoader(getActivity(), currentPage, AppConstant.GALLERY_LIST_JSON);
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Page[]> loader, Page[] data) {
-        setListAdapter(new GalleryListAdapter(getActivity(), data));
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Page[]> loader) {
 
     }
 }

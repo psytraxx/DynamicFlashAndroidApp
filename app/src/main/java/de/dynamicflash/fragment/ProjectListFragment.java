@@ -5,18 +5,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
 import androidx.viewpager.widget.ViewPager;
 
 import de.dynamicflash.R;
 import de.dynamicflash.adaptor.ProjectSwipeAdapter;
-import de.dynamicflash.helper.AppConstant;
-import de.dynamicflash.helper.PageLoader;
+import de.dynamicflash.helper.HttpClient;
 import de.dynamicflash.model.Page;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,7 +22,7 @@ import de.dynamicflash.model.Page;
  * Date: 11/16/13
  * Time: 3:42 PM
  */
-public class ProjectListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Page[]> {
+public class ProjectListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,27 +35,21 @@ public class ProjectListFragment extends Fragment implements LoaderManager.Loade
     public void onStart() {
         super.onStart();
 
-        LoaderManager.getInstance(this).initLoader(0, null,this).forceLoad();
-    }
+        Call<Page[]> project = HttpClient.getInstance().getApi().getProjects();
+        project.enqueue(new Callback<Page[]>() {
+            @Override
+            public void onResponse(Call<Page[]> call, Response<Page[]> response) {
+                ProjectSwipeAdapter adapter = new ProjectSwipeAdapter(getActivity(), response.body());
+                View view = getView();
+                assert view != null;
+                ViewPager viewPager = view.findViewById(R.id.pagerID);
+                viewPager.setAdapter(adapter);
+            }
 
-
-    @NonNull
-    @Override
-    public Loader<Page[]> onCreateLoader(int id, @Nullable Bundle args) {
-        return new PageLoader(getActivity(), 0, AppConstant.PROJECT_LIST_JSON);
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull androidx.loader.content.Loader<Page[]> loader, Page[] pages) {
-        ProjectSwipeAdapter adapter = new ProjectSwipeAdapter(getActivity().getLayoutInflater(), pages);
-        View view = getView();
-        assert view != null;
-        ViewPager viewPager = view.findViewById(R.id.pagerID);
-        viewPager.setAdapter(adapter);
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull androidx.loader.content.Loader<Page[]> loader) {
-
+            @Override
+            public void onFailure(Call<Page[]> call, Throwable t) {
+                call.cancel();
+            }
+        });
     }
 }
