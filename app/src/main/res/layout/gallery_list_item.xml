@@ -12,7 +12,7 @@
                 android:id="@+id/titleID"
                 android:layout_width="match_parent"
 
-                android:text="Gallery Title" android:textStyle="bold"
+                android:text="@string/gallery_title" android:textStyle="bold"
                 android:typeface="sans"
             android:textSize="20sp" android:textColor="@android:color/secondary_text_light"
             android:padding="4sp" />
@@ -21,7 +21,6 @@
 
         <TextView
                 android:id="@+id/textID"
-                android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:typeface="sans"

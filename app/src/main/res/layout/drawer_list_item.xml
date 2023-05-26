@@ -23,5 +23,4 @@
     android:paddingLeft="@dimen/activity_margin"
     android:paddingRight="@dimen/activity_margin"
     android:background="?android:attr/activatedBackgroundIndicator"
-    android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    android:text="Test" />
+    android:minHeight="?android:attr/listPreferredItemHeightSmall" />
