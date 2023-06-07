@@ -48,7 +48,7 @@ public class PhotoListAdapter extends ArrayAdapter<Photo> {
             assert item != null;
 
             Glide.with(context)
-                    .load(item.getThumb_path())
+                    .load(item.getThumb_path()+"&fm=webp")
                     .into(holder.image);
         }
 
