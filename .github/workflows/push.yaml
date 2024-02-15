@@ -8,6 +8,9 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+
+    env:
+      GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx4g -Xms1g -XX:MaxPermSize=2048m -XX:MaxMetaspaceSize=1024m -XX:+HeapDumpOnOutOfMemoryError" -Dfile.encoding="UTF-8" -Dorg.gradle.daemon=false -Dorg.gradle.parallel=true
     steps:
       - uses: actions/checkout@v4
       - name: Increase swapfile
