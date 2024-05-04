@@ -90,12 +90,12 @@ public class GalleryListFragment extends ListFragment implements AbsListView.OnS
         Call<Page[]> project = HttpClient.getInstance().getApi().getGalleries(currentPage, MAX_RESULTS);
         project.enqueue(new Callback<Page[]>() {
             @Override
-            public void onResponse(Call<Page[]> call, Response<Page[]> response) {
+            public void onResponse(@NonNull Call<Page[]> call, @NonNull Response<Page[]> response) {
                 setListAdapter(new GalleryListAdapter(getActivity(), response.body()));
             }
 
             @Override
-            public void onFailure(Call<Page[]> call, Throwable t) {
+            public void onFailure(@NonNull Call<Page[]> call, @NonNull Throwable t) {
                 call.cancel();
             }
         });

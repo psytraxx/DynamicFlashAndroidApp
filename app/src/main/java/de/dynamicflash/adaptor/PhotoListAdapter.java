@@ -1,5 +1,7 @@
 package de.dynamicflash.adaptor;
 
+import static de.dynamicflash.helper.DynamicFlashAppGlideModule.EXTRA_IMAGE_URL_PARAMS;
+
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -48,7 +50,7 @@ public class PhotoListAdapter extends ArrayAdapter<Photo> {
             assert item != null;
 
             Glide.with(context)
-                    .load(item.getThumb_path()+"&fm=webp")
+                    .load(item.getThumb_path()+EXTRA_IMAGE_URL_PARAMS)
                     .into(holder.image);
         }
 

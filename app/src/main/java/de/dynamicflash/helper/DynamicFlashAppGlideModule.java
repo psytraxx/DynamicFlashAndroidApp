@@ -13,6 +13,8 @@ import com.bumptech.glide.module.AppGlideModule;
 @GlideModule
 public class DynamicFlashAppGlideModule extends AppGlideModule {
 
+    public static final String EXTRA_IMAGE_URL_PARAMS = "&fm=avif";
+
     @Override
     public void applyOptions(@NonNull Context context, @NonNull GlideBuilder builder) {
         CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(context);

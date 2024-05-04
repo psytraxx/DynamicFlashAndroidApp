@@ -1,5 +1,7 @@
 package de.dynamicflash.adaptor;
 
+import static de.dynamicflash.helper.DynamicFlashAppGlideModule.EXTRA_IMAGE_URL_PARAMS;
+
 import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +67,7 @@ public class ProjectSwipeAdapter extends PagerAdapter {
         final String uri = Api.BASE_URL + '/' + project.getImage();
 
         Glide.with(activity)
-                .load(uri)
+                .load(uri+EXTRA_IMAGE_URL_PARAMS)
                 .into(imgDisplay);
 
         container.addView(viewLayout);
