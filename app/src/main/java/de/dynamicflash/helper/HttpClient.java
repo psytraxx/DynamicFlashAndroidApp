@@ -16,20 +16,23 @@ public class HttpClient {
     private static HttpClient instance = null;
     private final Api myApi;
 
+    public static OkHttpClient getClient() {
+        return new OkHttpClient.Builder()
+                .followRedirects(true)
+                .addInterceptor(new LoggingInterceptor())
+                .protocols(Arrays.asList(Protocol.HTTP_1_1,Protocol.HTTP_2, Protocol.QUIC))
+                .build();
+    }
+
     private HttpClient() {
         GsonBuilder builder = new GsonBuilder();
 
         // Register an adapter to manage the date types as long values
         builder.registerTypeAdapter(Date.class, (JsonDeserializer<Date>) (json, typeOfT, context) -> new Date(json.getAsJsonPrimitive().getAsLong()));
-
-        OkHttpClient client = new OkHttpClient.Builder()
-                .followRedirects(true)
-                .protocols(Arrays.asList(Protocol.HTTP_1_1,Protocol.HTTP_2, Protocol.QUIC))
-                .build();
         Gson gson = builder.create();
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Api.BASE_URL)
-                .client(client)
+                .client(getClient())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
