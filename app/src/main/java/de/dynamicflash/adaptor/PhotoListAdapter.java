@@ -33,16 +33,16 @@ public class PhotoListAdapter extends ArrayAdapter<Photo> {
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        View row = convertView;
+
         final ViewHolder holder;
-        if (row == null) {
+        if (convertView == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-            row = inflater.inflate(resource, parent, false);
+            convertView = inflater.inflate(resource, parent, false);
             holder = new ViewHolder();
-            holder.image = row.findViewById(R.id.imageID);
-            row.setTag(holder);
+            holder.image = convertView.findViewById(R.id.imageID);
+            convertView.setTag(holder);
         } else {
-            holder = (ViewHolder) row.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
 
         if (getCount() > position) {
@@ -54,7 +54,7 @@ public class PhotoListAdapter extends ArrayAdapter<Photo> {
                     .into(holder.image);
         }
 
-        return row;
+        return convertView;
     }
 
     static class ViewHolder {

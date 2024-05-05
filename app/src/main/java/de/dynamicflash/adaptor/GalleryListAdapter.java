@@ -27,20 +27,19 @@ public class GalleryListAdapter extends ArrayAdapter<Page> {
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        View row = convertView;
         ViewHolder holder;
-        if (row == null) {
+        if (convertView == null) {
 
-            row = View.inflate(getContext(), R.layout.gallery_list_item, null);
+            convertView = View.inflate(getContext(), R.layout.gallery_list_item, null);
 
             holder = new ViewHolder();
-            holder.title = row.findViewById(R.id.titleID);
-            holder.text = row.findViewById(R.id.textID);
+            holder.title = convertView.findViewById(R.id.titleID);
+            holder.text = convertView.findViewById(R.id.textID);
 
-            row.setTag(holder);
+            convertView.setTag(holder);
 
         } else {
-            holder = (ViewHolder) row.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
 
         Page page = getItem(position);
@@ -53,7 +52,7 @@ public class GalleryListAdapter extends ArrayAdapter<Page> {
             holder.text.setText(Html.fromHtml(page.getDescription()));
         }
 
-        return row;
+        return convertView;
     }
 
     private static class ViewHolder {
