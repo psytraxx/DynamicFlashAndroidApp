@@ -10,7 +10,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import de.dynamicflash.R;
 import de.dynamicflash.adaptor.ProjectSwipeAdapter;
-import de.dynamicflash.helper.HttpClient;
+import de.dynamicflash.helper.RetrofitInstance;
 import de.dynamicflash.model.Page;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,7 +35,7 @@ public class ProjectListFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        Call<Page[]> project = HttpClient.getInstance().getApi().getProjects();
+        Call<Page[]> project = RetrofitInstance.api().getProjects();
         project.enqueue(new Callback<Page[]>() {
             @Override
             public void onResponse(Call<Page[]> call, Response<Page[]> response) {

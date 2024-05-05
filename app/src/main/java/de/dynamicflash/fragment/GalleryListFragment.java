@@ -15,7 +15,7 @@ import androidx.fragment.app.ListFragment;
 import de.dynamicflash.R;
 import de.dynamicflash.activity.PhotoGridActivity;
 import de.dynamicflash.adaptor.GalleryListAdapter;
-import de.dynamicflash.helper.HttpClient;
+import de.dynamicflash.helper.RetrofitInstance;
 import de.dynamicflash.model.Page;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -87,7 +87,7 @@ public class GalleryListFragment extends ListFragment implements AbsListView.OnS
     }
 
     private void loadCurrentPage() {
-        Call<Page[]> project = HttpClient.getInstance().getApi().getGalleries(currentPage, MAX_RESULTS);
+        Call<Page[]> project = RetrofitInstance.api().getGalleries(currentPage, MAX_RESULTS);
         project.enqueue(new Callback<Page[]>() {
             @Override
             public void onResponse(@NonNull Call<Page[]> call, @NonNull Response<Page[]> response) {

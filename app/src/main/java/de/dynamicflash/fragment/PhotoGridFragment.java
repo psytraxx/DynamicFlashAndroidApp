@@ -14,7 +14,7 @@ import de.dynamicflash.GalleryApplication;
 import de.dynamicflash.R;
 import de.dynamicflash.activity.PhotoFullscreenSwipeActivity;
 import de.dynamicflash.adaptor.PhotoListAdapter;
-import de.dynamicflash.helper.HttpClient;
+import de.dynamicflash.helper.RetrofitInstance;
 import de.dynamicflash.model.Photo;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,7 +60,7 @@ public class PhotoGridFragment extends Fragment {
         adapter = new PhotoListAdapter(getActivity());
         view.setAdapter(adapter);
 
-        Call<Photo[]> album = HttpClient.getInstance().getApi().getAlbum(getArguments().getString("folder"));
+        Call<Photo[]> album = RetrofitInstance.api().getAlbum(getArguments().getString("folder"));
 
         album.enqueue(new Callback<Photo[]>() {
             @Override
