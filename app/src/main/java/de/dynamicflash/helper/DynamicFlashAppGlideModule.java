@@ -1,6 +1,6 @@
 package de.dynamicflash.helper;
 
-import static de.dynamicflash.helper.HttpClient.getClient;
+import static de.dynamicflash.helper.OkHttpClientInstance.httpClient;
 
 import android.content.Context;
 
@@ -41,7 +41,7 @@ public class DynamicFlashAppGlideModule extends AppGlideModule {
 
     @Override
     public void registerComponents(@NonNull Context context, @NonNull Glide glide, Registry registry) {
-        OkHttpUrlLoader.Factory factory = new OkHttpUrlLoader.Factory(getClient());
+        OkHttpUrlLoader.Factory factory = new OkHttpUrlLoader.Factory(httpClient());
         registry.replace(GlideUrl.class, InputStream.class, factory);
     }
 

@@ -1,6 +1,6 @@
 package de.dynamicflash.helper;
 
-import static de.dynamicflash.helper.HttpClient.getClient;
+import static de.dynamicflash.helper.OkHttpClientInstance.httpClient;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,7 +22,7 @@ public class RetrofitInstance {
         Gson gson = builder.create();
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Api.BASE_URL)
-                .client(getClient())
+                .client(httpClient())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
