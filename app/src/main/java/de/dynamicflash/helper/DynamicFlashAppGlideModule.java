@@ -14,8 +14,8 @@ import com.bumptech.glide.request.RequestOptions;
 @GlideModule
 public class DynamicFlashAppGlideModule extends AppGlideModule {
 
-    public static final String EXTRA_IMAGE_URL_PARAMS = "&fm=avif";
-    private static final int GLIDE_REQUEST_TIMOUT_MS = 30000;
+    public static final String EXTRA_IMAGE_URL_PARAMS = "&fm=webp";
+    private static final int GLIDE_REQUEST_TIMEOUT_MS = 30000;
 
     @Override
     public void applyOptions(@NonNull Context context, @NonNull GlideBuilder builder) {
@@ -27,7 +27,7 @@ public class DynamicFlashAppGlideModule extends AppGlideModule {
         int cacheSize = 30 * 1024 * 1024; // 10 MiB
 
         builder.setDiskCache(new InternalCacheDiskCacheFactory(context, cacheSize));
-        builder.setDefaultRequestOptions(new RequestOptions().timeout(GLIDE_REQUEST_TIMOUT_MS).placeholder(circularProgressDrawable));
+        builder.setDefaultRequestOptions(new RequestOptions().timeout(GLIDE_REQUEST_TIMEOUT_MS).placeholder(circularProgressDrawable));
         super.applyOptions(context, builder);
     }
 
