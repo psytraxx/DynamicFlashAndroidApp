@@ -4,8 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 
+import java.util.Arrays;
 import java.util.Date;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -19,9 +22,14 @@ public class HttpClient {
         // Register an adapter to manage the date types as long values
         builder.registerTypeAdapter(Date.class, (JsonDeserializer<Date>) (json, typeOfT, context) -> new Date(json.getAsJsonPrimitive().getAsLong()));
 
+        OkHttpClient client = new OkHttpClient.Builder()
+                .followRedirects(true)
+                .protocols(Arrays.asList(Protocol.HTTP_1_1,Protocol.HTTP_2, Protocol.QUIC))
+                .build();
         Gson gson = builder.create();
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Api.BASE_URL)
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
