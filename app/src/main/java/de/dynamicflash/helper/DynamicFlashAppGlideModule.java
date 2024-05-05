@@ -23,6 +23,9 @@ import java.io.InputStream;
 public class DynamicFlashAppGlideModule extends AppGlideModule {
 
     public static final String EXTRA_IMAGE_URL_PARAMS = "&fm=webp";
+
+    public static final String IMAGE_BASE_URL = "https://images.dynamicflash.de/";
+
     private static final int GLIDE_REQUEST_TIMEOUT_MS = 30000;
 
     @Override

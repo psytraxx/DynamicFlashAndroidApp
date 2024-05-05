@@ -1,6 +1,7 @@
 package de.dynamicflash.adaptor;
 
 import static de.dynamicflash.helper.DynamicFlashAppGlideModule.EXTRA_IMAGE_URL_PARAMS;
+import static de.dynamicflash.helper.DynamicFlashAppGlideModule.IMAGE_BASE_URL;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -63,8 +64,10 @@ public class PhotoFullscreenSwipeAdapter extends PagerAdapter {
             label.setText(photo.getTitle());
         }
 
+        final String uri = IMAGE_BASE_URL + photo.getImage() + "?w=1920&h=1280&fit=inside" + EXTRA_IMAGE_URL_PARAMS;
+
         Glide.with(context)
-                .load(photo.getFull_path()+EXTRA_IMAGE_URL_PARAMS)
+                .load(uri)
                 .into(imgDisplay);
 
         container.addView(viewLayout);

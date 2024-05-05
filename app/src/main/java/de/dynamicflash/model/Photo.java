@@ -7,16 +7,15 @@ package de.dynamicflash.model;
  * Time: 12:16
  */
 public class Photo {
-    private String full_path;
-    private String thumb_path;
+    private String image;
     private String title;
 
-    public String getThumb_path() {
-        return thumb_path;
+    public String getImage() {
+        return image;
     }
 
-    public void setThumb_path(String thumb_path) {
-        this.thumb_path = thumb_path;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getTitle() {
@@ -26,14 +25,4 @@ public class Photo {
     public void setTitle(String title) {
         this.title = title;
     }
-
-    public String getFull_path() {
-        return full_path;
-    }
-
-    public void setFull_path(String full_path) {
-        this.full_path = full_path;
-    }
-
-
 }
