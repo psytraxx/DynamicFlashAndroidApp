@@ -46,11 +46,7 @@ public class GalleryListAdapter extends ArrayAdapter<Page> {
 
         assert page != null;
         holder.title.setText(page.getTitle());
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            holder.text.setText(Html.fromHtml(page.getDescription(), Html.FROM_HTML_MODE_COMPACT));
-        } else {
-            holder.text.setText(Html.fromHtml(page.getDescription()));
-        }
+        holder.text.setText(Html.fromHtml(page.getDescription(), Html.FROM_HTML_MODE_COMPACT));
 
         return convertView;
     }

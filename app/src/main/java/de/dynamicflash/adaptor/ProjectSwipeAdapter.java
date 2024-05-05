@@ -58,11 +58,7 @@ public class ProjectSwipeAdapter extends PagerAdapter {
             label.setText(project.getTitle());
         }
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            description.setText(Html.fromHtml(project.getDescription(), Html.FROM_HTML_MODE_COMPACT));
-        } else {
-            description.setText(Html.fromHtml(project.getDescription()));
-        }
+        description.setText(Html.fromHtml(project.getDescription(), Html.FROM_HTML_MODE_COMPACT));
 
         final String uri = Api.BASE_URL + '/' + project.getImage();
 
