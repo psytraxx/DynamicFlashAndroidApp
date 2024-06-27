@@ -22,7 +22,7 @@ import java.io.InputStream;
 @GlideModule
 public class DynamicFlashAppGlideModule extends AppGlideModule {
 
-    public static final String EXTRA_IMAGE_URL_PARAMS = "&fm=webp";
+    public static final String EXTRA_IMAGE_URL_PARAMS = "&fm=avif";
 
     public static final String IMAGE_BASE_URL = "https://images.dynamicflash.de/";
 

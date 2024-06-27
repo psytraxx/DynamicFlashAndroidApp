@@ -50,7 +50,7 @@ public class PhotoListAdapter extends ArrayAdapter<Photo> {
             Photo item = getItem(position);
             assert item != null;
 
-            final String uri = IMAGE_BASE_URL + item.getImage() + "?w=320&h=240&fit=inside" + EXTRA_IMAGE_URL_PARAMS;
+            final String uri = IMAGE_BASE_URL + item.getImage() + "?w=320&h=240&dpr=2&fit=cover" + EXTRA_IMAGE_URL_PARAMS;
 
             Glide.with(context)
                     .load(uri)
