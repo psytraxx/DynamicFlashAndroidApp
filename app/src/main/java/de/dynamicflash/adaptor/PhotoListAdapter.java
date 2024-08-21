@@ -20,14 +20,12 @@ import de.dynamicflash.model.Photo;
 public class PhotoListAdapter extends ArrayAdapter<Photo> {
 
     private final Context context;
-    private final int resource;
     private final String folder;
 
     public PhotoListAdapter(Context context, String folder) {
 
         super(context, R.layout.photo_grid_item);
         this.folder = folder;
-        this.resource = R.layout.photo_grid_item;
         this.context = context;
     }
 
@@ -36,12 +34,10 @@ public class PhotoListAdapter extends ArrayAdapter<Photo> {
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
-        ViewHolder holder; // No need to initialize here
-
+        ViewHolder holder;
         if (convertView == null) {
-            LayoutInflater inflater = LayoutInflater.from(parent.getContext()); // More efficient way to get LayoutInflater
-            convertView = inflater.inflate(resource, parent, false);
-            holder = new ViewHolder(convertView); // Initialize ViewHolder directly
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.photo_grid_item, parent, false);
+            holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();

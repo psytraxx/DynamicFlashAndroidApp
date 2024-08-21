@@ -2,6 +2,7 @@ package de.dynamicflash.adaptor;
 
 import android.content.Context;
 import android.text.Html;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -35,33 +36,30 @@ public class GalleryListAdapter extends ArrayAdapter<Page> {
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-
-            convertView = View.inflate(getContext(), R.layout.gallery_list_item, null);
-
-            holder = new ViewHolder();
-            holder.title = convertView.findViewById(R.id.titleID);
-            holder.text = convertView.findViewById(R.id.textID);
-
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.gallery_list_item, parent, false);
+            holder = new ViewHolder(convertView);
             convertView.setTag(holder);
-
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
         Page page = getItem(position);
 
-        assert page != null;
-        holder.title.setText(page.getTitle());
-        if (page.getDescription() != null) {
-            holder.text.setText(Html.fromHtml(page.getDescription(), Html.FROM_HTML_MODE_COMPACT));
+        if (page != null) {
+            holder.title.setText(page.getTitle());
+            holder.text.setText(page.getDescription() != null ? Html.fromHtml(page.getDescription(), Html.FROM_HTML_MODE_COMPACT) : "");
         }
 
         return convertView;
     }
 
     private static class ViewHolder {
-
         TextView title;
         TextView text;
+
+        ViewHolder(View view) {
+            title = view.findViewById(R.id.titleID);
+            text = view.findViewById(R.id.textID);
+        }
     }
 }
