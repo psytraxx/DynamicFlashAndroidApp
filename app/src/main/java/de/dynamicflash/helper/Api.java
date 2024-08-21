@@ -9,8 +9,8 @@ import retrofit2.http.Path;
 public interface Api {
     String BASE_URL = "https://www.dynamicflash.de";
 
-    @GET("/api/album/{folder}")
-    Call<Photo[]> getAlbum(@Path("folder") String folder);
+    @GET("/api/photosbyalbumname/{folder}")
+    Call<Photo[]> getPphotosByAlbumName(@Path("folder") String folder);
 
     @GET("/api/childpages/{pageid}/{page}")
     Call<PageResult> getChildPages(@Path("pageid") String pageid, @Path("page") Integer page);

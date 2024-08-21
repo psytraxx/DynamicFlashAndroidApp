@@ -26,8 +26,11 @@ public class PhotoFullscreenSwipeActivity extends Activity {
 
         ViewPager viewPager = findViewById(R.id.pagerID);
 
+        String folder = getIntent().getStringExtra("folder");
+
+
         // Gridview adapter
-        PhotoFullscreenSwipeAdapter adapter = new PhotoFullscreenSwipeAdapter(PhotoFullscreenSwipeActivity.this, ((GalleryApplication) getApplication()).getCurrentPhotos());
+        PhotoFullscreenSwipeAdapter adapter = new PhotoFullscreenSwipeAdapter(PhotoFullscreenSwipeActivity.this, ((GalleryApplication) getApplication()).getCurrentPhotos(), folder);
 
         int position = getIntent().getIntExtra("position", 0);
 

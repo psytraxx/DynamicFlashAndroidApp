@@ -23,12 +23,15 @@ public class PhotoFullscreenSwipeAdapter extends PagerAdapter {
 
     private final Context context;
     private final Photo[] photos;
+    private final String folder;
 
     // constructor
     public PhotoFullscreenSwipeAdapter(Context activity,
-                                       Photo[] photos) {
+                                       Photo[] photos,
+                                       String folder) {
         this.context = activity;
         this.photos = photos;
+        this.folder = folder;
     }
 
     @Override
@@ -58,13 +61,13 @@ public class PhotoFullscreenSwipeAdapter extends PagerAdapter {
 
         Photo photo = photos[position];
 
-        if (photo.getTitle().isEmpty()) {
+        if (photo.getComment().isEmpty()) {
             label.setVisibility(View.GONE);
         } else {
-            label.setText(photo.getTitle());
+            label.setText(photo.getComment());
         }
 
-        final String uri = IMAGE_BASE_URL + photo.getImage() + "?w=1920&h=1280&fit=inside" + EXTRA_IMAGE_URL_PARAMS;
+        final String uri = String.format("%s/%s/%s?w=1920&h=1280&fit=inside%s", IMAGE_BASE_URL, folder, photo.getFilename(), EXTRA_IMAGE_URL_PARAMS);
 
         Glide.with(context)
                 .load(uri)

@@ -21,10 +21,12 @@ public class PhotoListAdapter extends ArrayAdapter<Photo> {
 
     private final Context context;
     private final int resource;
+    private final String folder;
 
-    public PhotoListAdapter(Context context) {
+    public PhotoListAdapter(Context context, String folder) {
 
         super(context, R.layout.photo_grid_item);
+        this.folder = folder;
         this.resource = R.layout.photo_grid_item;
         this.context = context;
     }
@@ -49,7 +51,7 @@ public class PhotoListAdapter extends ArrayAdapter<Photo> {
         if (position >= 0 && position < getCount()) {
             Photo item = getItem(position);
             if (item != null) { // Null check for item
-                String uri = IMAGE_BASE_URL + item.getImage() + "?w=320&h=240&dpr=2&fit=cover" + EXTRA_IMAGE_URL_PARAMS;
+                final String uri = String.format("%s/%s/%s?w=1920&h=1280&fit=inside%s", IMAGE_BASE_URL, folder, item.getFilename(), EXTRA_IMAGE_URL_PARAMS);
 
                 Glide.with(context)
                         .load(uri)

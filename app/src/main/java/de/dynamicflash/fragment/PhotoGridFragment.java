@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import de.dynamicflash.GalleryApplication;
@@ -35,6 +36,7 @@ public class PhotoGridFragment extends Fragment {
         // launch full screen activity
         Intent i = new Intent(getActivity().getBaseContext(), PhotoFullscreenSwipeActivity.class);
         i.putExtra("position", position);
+        i.putExtra("folder", getArguments().getString("folder"));
         startActivity(i);
     };
     private PhotoListAdapter adapter;
@@ -56,22 +58,24 @@ public class PhotoGridFragment extends Fragment {
         }
         view.setOnItemClickListener(itemClickListener);
 
+        String folder = getArguments().getString("folder");
         // setting grid view adapter
-        adapter = new PhotoListAdapter(getActivity());
+        adapter = new PhotoListAdapter(getActivity(),folder);
         view.setAdapter(adapter);
 
-        Call<Photo[]> album = RetrofitInstance.api().getAlbum(getArguments().getString("folder"));
+
+        Call<Photo[]> album = RetrofitInstance.api().getPphotosByAlbumName(folder);
 
         album.enqueue(new Callback<Photo[]>() {
             @Override
-            public void onResponse(Call<Photo[]> call, Response<Photo[]> response) {
+            public void onResponse(@NonNull Call<Photo[]> call, @NonNull Response<Photo[]> response) {
                 final GalleryApplication application = (GalleryApplication) getActivity().getApplication();
                 application.setCurrentPhotos(response.body());
                 adapter.addAll(response.body());
             }
 
             @Override
-            public void onFailure(Call<Photo[]> call, Throwable t) {
+            public void onFailure(@NonNull Call<Photo[]> call, @NonNull Throwable t) {
                 call.cancel();
             }
         });
