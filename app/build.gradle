@@ -14,13 +14,12 @@ android {
     lint {
         lintConfig file('lint.xml')
     }
-
     packagingOptions {
-        doNotStrip "lib/armeabi-v7a/libavif_android.so"
-        doNotStrip "lib/arm64-v8a/libavif_android.so"
-        doNotStrip "lib/x86/libavif_android.so"
-        doNotStrip "lib/x86_64/libavif_android.so"
+        jniLibs {
+            keepDebugSymbols += ['lib/armeabi-v7a/libavif_android.so', 'lib/arm64-v8a/libavif_android.so', 'lib/x86/libavif_android.so', 'lib/x86_64/libavif_android.so']
+        }
     }
+
 
 }
 

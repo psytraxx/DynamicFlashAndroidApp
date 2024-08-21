@@ -24,6 +24,12 @@ public class GalleryListAdapter extends ArrayAdapter<Page> {
         super(context, R.layout.gallery_list, list);
     }
 
+    // Add this method to append new items
+    public void addItems(Page[] newItems) {
+        addAll(newItems);
+        notifyDataSetChanged();  // Notify the adapter to refresh the list
+    }
+
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
@@ -46,7 +52,9 @@ public class GalleryListAdapter extends ArrayAdapter<Page> {
 
         assert page != null;
         holder.title.setText(page.getTitle());
-        holder.text.setText(Html.fromHtml(page.getDescription(), Html.FROM_HTML_MODE_COMPACT));
+        if (page.getDescription() != null) {
+            holder.text.setText(Html.fromHtml(page.getDescription(), Html.FROM_HTML_MODE_COMPACT));
+        }
 
         return convertView;
     }

@@ -1,6 +1,7 @@
 package de.dynamicflash.helper;
 
 import de.dynamicflash.model.Page;
+import de.dynamicflash.model.PageResult;
 import de.dynamicflash.model.Photo;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -18,4 +19,7 @@ public interface Api {
 
     @GET("/api/projects")
     Call<Page[]> getProjects();
+
+    @GET("/api/childpages/{pageid}/{page}")
+    Call<PageResult> getChildPages(@Path("pageid") String pageid, @Path("page") Integer page);
 }
