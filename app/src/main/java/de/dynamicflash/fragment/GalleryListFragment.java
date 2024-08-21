@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.ListFragment;
 
+import java.util.ArrayList;
+
 import de.dynamicflash.R;
 import de.dynamicflash.activity.PhotoGridActivity;
 import de.dynamicflash.adaptor.GalleryListAdapter;
@@ -34,10 +36,15 @@ public class GalleryListFragment extends ListFragment implements AbsListView.OnS
     private GalleryListAdapter adapter;
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        adapter = new GalleryListAdapter(getActivity(), new ArrayList<>());
+        setListAdapter(adapter);
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
-        setListAdapter(new GalleryListAdapter(getActivity(), new Page[0]));
-
         loadCurrentPage();
     }
 
@@ -92,13 +99,7 @@ public class GalleryListFragment extends ListFragment implements AbsListView.OnS
         project.enqueue(new Callback<PageResult>() {
             @Override
             public void onResponse(@NonNull Call<PageResult> call, @NonNull Response<PageResult> response) {
-                if (adapter == null) {
-                    adapter = new GalleryListAdapter(getActivity(), response.body().getResults());
-                    setListAdapter(adapter);
-                } else {
-                    adapter.addItems(response.body().getResults());
-                }
-
+                adapter.addPages(response.body().getResults());
             }
 
             @Override

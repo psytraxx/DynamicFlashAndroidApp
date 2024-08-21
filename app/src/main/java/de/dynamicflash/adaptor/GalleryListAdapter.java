@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
+
 import de.dynamicflash.R;
 import de.dynamicflash.model.Page;
 
@@ -20,16 +22,14 @@ import de.dynamicflash.model.Page;
  */
 public class GalleryListAdapter extends ArrayAdapter<Page> {
 
-    public GalleryListAdapter(Context context, Page[] list) {
+    public GalleryListAdapter(Context context, ArrayList<Page> list) {
         super(context, R.layout.gallery_list, list);
     }
 
-    // Add this method to append new items
-    public void addItems(Page[] newItems) {
-        addAll(newItems);
-        notifyDataSetChanged();  // Notify the adapter to refresh the list
+    public void addPages(ArrayList<Page> newPages) {
+        addAll(newPages);
+        notifyDataSetChanged();
     }
-
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
