@@ -7,22 +7,22 @@ package de.dynamicflash.model;
  * Time: 12:16
  */
 public class Photo {
-    private String image;
-    private String title;
+    private String filename;
+    private String comment;
 
-    public String getImage() {
-        return image;
+    public String getFilename() {
+        return filename;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
-    public String getTitle() {
-        return title;
+    public String getComment() {
+        return comment;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

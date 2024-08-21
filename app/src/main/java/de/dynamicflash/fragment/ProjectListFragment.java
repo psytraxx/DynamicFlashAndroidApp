@@ -5,13 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import de.dynamicflash.R;
 import de.dynamicflash.adaptor.ProjectSwipeAdapter;
 import de.dynamicflash.helper.RetrofitInstance;
-import de.dynamicflash.model.Page;
+import de.dynamicflash.model.PageResult;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,11 +36,11 @@ public class ProjectListFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        Call<Page[]> project = RetrofitInstance.api().getProjects();
-        project.enqueue(new Callback<Page[]>() {
+        Call<PageResult> project = RetrofitInstance.api().getChildPages("projects",1);
+        project.enqueue(new Callback<PageResult>() {
             @Override
-            public void onResponse(Call<Page[]> call, Response<Page[]> response) {
-                ProjectSwipeAdapter adapter = new ProjectSwipeAdapter(getActivity(), response.body());
+            public void onResponse(@NonNull Call<PageResult> call, @NonNull Response<PageResult> response) {
+                ProjectSwipeAdapter adapter = new ProjectSwipeAdapter(getActivity(), response.body().getResults());
                 View view = getView();
                 assert view != null;
                 ViewPager viewPager = view.findViewById(R.id.pagerID);
@@ -47,7 +48,7 @@ public class ProjectListFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<Page[]> call, Throwable t) {
+            public void onFailure(@NonNull Call<PageResult> call, @NonNull Throwable t) {
                 call.cancel();
             }
         });

@@ -16,8 +16,9 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
+
 import de.dynamicflash.R;
-import de.dynamicflash.helper.Api;
 import de.dynamicflash.model.Page;
 
 /**
@@ -27,17 +28,17 @@ import de.dynamicflash.model.Page;
  * Time: 4:00 PM
  */
 public class ProjectSwipeAdapter extends PagerAdapter {
-    private final Page[] pages;
+    private final ArrayList<Page> pages;
     private final FragmentActivity activity;
 
-    public ProjectSwipeAdapter(FragmentActivity context, Page[] pages) {
+    public ProjectSwipeAdapter(FragmentActivity context, ArrayList<Page> pages) {
         this.pages = pages;
         this.activity = context;
     }
 
     @Override
     public int getCount() {
-        return pages.length;
+        return pages.size();
     }
 
     @NonNull
@@ -51,7 +52,7 @@ public class ProjectSwipeAdapter extends PagerAdapter {
         TextView label = viewLayout.findViewById(R.id.labelID);
         TextView description = viewLayout.findViewById(R.id.descriptionID);
 
-        Page project = pages[position];
+        Page project = pages.get(position);
 
         if (project.getTitle().isEmpty()) {
             label.setVisibility(View.GONE);

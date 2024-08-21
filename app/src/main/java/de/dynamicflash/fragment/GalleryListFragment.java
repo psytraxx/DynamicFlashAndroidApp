@@ -12,11 +12,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.ListFragment;
 
+import java.util.ArrayList;
+
 import de.dynamicflash.R;
 import de.dynamicflash.activity.PhotoGridActivity;
 import de.dynamicflash.adaptor.GalleryListAdapter;
 import de.dynamicflash.helper.RetrofitInstance;
 import de.dynamicflash.model.Page;
+import de.dynamicflash.model.PageResult;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,14 +32,19 @@ import retrofit2.Response;
  */
 public class GalleryListFragment extends ListFragment implements AbsListView.OnScrollListener {
 
-    private static final int MAX_RESULTS = 20;
-    private int currentPage = 0;
+    private int currentPage = 1;
+    private GalleryListAdapter adapter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        adapter = new GalleryListAdapter(getActivity(), new ArrayList<>());
+        setListAdapter(adapter);
+    }
 
     @Override
     public void onStart() {
         super.onStart();
-        setListAdapter(new GalleryListAdapter(getActivity(), new Page[0]));
-
         loadCurrentPage();
     }
 
@@ -87,15 +95,15 @@ public class GalleryListFragment extends ListFragment implements AbsListView.OnS
     }
 
     private void loadCurrentPage() {
-        Call<Page[]> project = RetrofitInstance.api().getGalleries(currentPage, MAX_RESULTS);
-        project.enqueue(new Callback<Page[]>() {
+        Call<PageResult> project = RetrofitInstance.api().getChildPages("photos", currentPage);
+        project.enqueue(new Callback<PageResult>() {
             @Override
-            public void onResponse(@NonNull Call<Page[]> call, @NonNull Response<Page[]> response) {
-                setListAdapter(new GalleryListAdapter(getActivity(), response.body()));
+            public void onResponse(@NonNull Call<PageResult> call, @NonNull Response<PageResult> response) {
+                adapter.addPages(response.body().getResults());
             }
 
             @Override
-            public void onFailure(@NonNull Call<Page[]> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<PageResult> call, @NonNull Throwable t) {
                 call.cancel();
             }
         });
