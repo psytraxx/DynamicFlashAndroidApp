@@ -10,13 +10,18 @@ import android.widget.GridView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
+import java.util.List;
 
 import de.dynamicflash.GalleryApplication;
 import de.dynamicflash.R;
 import de.dynamicflash.activity.PhotoFullscreenSwipeActivity;
 import de.dynamicflash.adaptor.PhotoListAdapter;
-import de.dynamicflash.helper.RetrofitInstance;
+import de.dynamicflash.model.Page;
 import de.dynamicflash.model.Photo;
+import de.dynamicflash.model.PhotoViewModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,10 +45,15 @@ public class PhotoGridFragment extends Fragment {
         startActivity(i);
     };
     private PhotoListAdapter adapter;
+    private PhotoViewModel viewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        // Initialize ViewModel
+        viewModel = new ViewModelProvider(this).get(PhotoViewModel.class);
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.photo_grid, container, false);
     }
@@ -63,22 +73,13 @@ public class PhotoGridFragment extends Fragment {
         adapter = new PhotoListAdapter(getActivity(),folder);
         view.setAdapter(adapter);
 
-
-        Call<Photo[]> album = RetrofitInstance.api().getPphotosByAlbumName(folder);
-
-        album.enqueue(new Callback<Photo[]>() {
+        viewModel.getPhotosByAlbumName(folder).observe(this, new Observer<List<Photo>>() {
             @Override
-            public void onResponse(@NonNull Call<Photo[]> call, @NonNull Response<Photo[]> response) {
+            public void onChanged(List<Photo> photos) {
                 final GalleryApplication application = (GalleryApplication) getActivity().getApplication();
-                application.setCurrentPhotos(response.body());
-                adapter.addAll(response.body());
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Photo[]> call, @NonNull Throwable t) {
-                call.cancel();
+                application.setCurrentPhotos(photos);
+                adapter.addAll(photos);
             }
         });
-
     }
 }

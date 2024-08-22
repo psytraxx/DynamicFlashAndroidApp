@@ -2,16 +2,17 @@ package de.dynamicflash.adaptor;
 
 import android.content.Context;
 import android.text.Html;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import de.dynamicflash.R;
+import de.dynamicflash.databinding.GalleryListItemBinding;
 import de.dynamicflash.model.Page;
 
 /**
@@ -22,46 +23,37 @@ import de.dynamicflash.model.Page;
  */
 public class GalleryListAdapter extends ArrayAdapter<Page> {
 
-    public GalleryListAdapter(Context context, ArrayList<Page> list) {
+    private final LayoutInflater inflater;
+
+    public GalleryListAdapter(Context context, List<Page> list) {
         super(context, R.layout.gallery_list, list);
+        inflater = LayoutInflater.from(context);
     }
 
-    public void addPages(ArrayList<Page> newPages) {
-        addAll(newPages);
-        notifyDataSetChanged();
-    }
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        ViewHolder holder;
+        GalleryListItemBinding binding;
+
         if (convertView == null) {
 
-            convertView = View.inflate(getContext(), R.layout.gallery_list_item, null);
-
-            holder = new ViewHolder();
-            holder.title = convertView.findViewById(R.id.titleID);
-            holder.text = convertView.findViewById(R.id.textID);
-
-            convertView.setTag(holder);
+            binding = GalleryListItemBinding.inflate(inflater, parent, false);
+            convertView = binding.getRoot();
+            convertView.setTag(binding);
 
         } else {
-            holder = (ViewHolder) convertView.getTag();
+            binding = (GalleryListItemBinding) convertView.getTag();
         }
 
         Page page = getItem(position);
 
-        assert page != null;
-        holder.title.setText(page.getTitle());
-        if (page.getDescription() != null) {
-            holder.text.setText(Html.fromHtml(page.getDescription(), Html.FROM_HTML_MODE_COMPACT));
+        if (page != null) {
+            binding.titleID.setText(page.getTitle());
+            if (page.getDescription() != null) {
+                binding.textID.setText(Html.fromHtml(page.getDescription(), Html.FROM_HTML_MODE_COMPACT));
+            }
         }
 
         return convertView;
-    }
-
-    private static class ViewHolder {
-
-        TextView title;
-        TextView text;
     }
 }

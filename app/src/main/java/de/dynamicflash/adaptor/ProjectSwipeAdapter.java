@@ -6,9 +6,7 @@ import static de.dynamicflash.helper.DynamicFlashAppGlideModule.IMAGE_BASE_URL;
 import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -18,7 +16,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-import de.dynamicflash.R;
+import de.dynamicflash.databinding.ProjectItemBinding;
 import de.dynamicflash.model.Page;
 
 /**
@@ -45,32 +43,27 @@ public class ProjectSwipeAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
 
-        View viewLayout = activity.getLayoutInflater().inflate(R.layout.project_item, container,
-                false);
-
-        ImageView imgDisplay = viewLayout.findViewById(R.id.imageID);
-        TextView label = viewLayout.findViewById(R.id.labelID);
-        TextView description = viewLayout.findViewById(R.id.descriptionID);
+        ProjectItemBinding binding = ProjectItemBinding.inflate(activity.getLayoutInflater(), container, false);
 
         Page project = pages.get(position);
 
         if (project.getTitle().isEmpty()) {
-            label.setVisibility(View.GONE);
+            binding.labelID.setVisibility(View.GONE);
         } else {
-            label.setText(project.getTitle());
+            binding.labelID.setText(project.getTitle());
         }
 
-        description.setText(Html.fromHtml(project.getDescription(), Html.FROM_HTML_MODE_COMPACT));
+        binding.descriptionID.setText(Html.fromHtml(project.getDescription(), Html.FROM_HTML_MODE_COMPACT));
 
         final String uri = IMAGE_BASE_URL + project.getImage() + "?w=1920&h=1280&fit=inside" + EXTRA_IMAGE_URL_PARAMS;
 
         Glide.with(activity)
                 .load(uri)
-                .into(imgDisplay);
+                .into(binding.imageID);
 
-        container.addView(viewLayout);
+        container.addView(binding.getRoot());
 
-        return viewLayout;
+        return binding.getRoot();
     }
 
     @Override

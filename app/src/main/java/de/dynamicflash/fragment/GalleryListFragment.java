@@ -11,18 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.ListFragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.dynamicflash.R;
 import de.dynamicflash.activity.PhotoGridActivity;
 import de.dynamicflash.adaptor.GalleryListAdapter;
-import de.dynamicflash.helper.RetrofitInstance;
+import de.dynamicflash.model.PageViewModel;
 import de.dynamicflash.model.Page;
-import de.dynamicflash.model.PageResult;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created with IntelliJ IDEA.
@@ -34,18 +32,23 @@ public class GalleryListFragment extends ListFragment implements AbsListView.OnS
 
     private int currentPage = 1;
     private GalleryListAdapter adapter;
+    private PageViewModel viewModel;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        adapter = new GalleryListAdapter(getActivity(), new ArrayList<>());
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Initialize ViewModel
+        viewModel = new ViewModelProvider(this).get(PageViewModel.class);
+
+        adapter = new GalleryListAdapter(getContext(), new ArrayList<>());
         setListAdapter(adapter);
-    }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        loadCurrentPage();
+        // Observe LiveData from ViewModel
+        viewModel.getChildPages("photos", currentPage).observe(getViewLifecycleOwner(), this::updatePageList);
+
+        // Set up scroll listener
+        getListView().setOnScrollListener(this);
     }
 
     public void onListItemClick(ListView l, @NonNull View v, int position, long id) {
@@ -77,10 +80,9 @@ public class GalleryListFragment extends ListFragment implements AbsListView.OnS
         }
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        getListView().setOnScrollListener(this);
+    private void updatePageList(List<Page> pages) {
+        adapter.clear();
+        adapter.addAll(pages);
     }
 
     @Override
@@ -89,24 +91,9 @@ public class GalleryListFragment extends ListFragment implements AbsListView.OnS
             // load 3 (4-1) items before we reach the end of the list
             if (listView.getLastVisiblePosition() >= listView.getCount() - 4) {
                 currentPage++;
-                loadCurrentPage();
+                viewModel.getChildPages("photos", currentPage).observe(getViewLifecycleOwner(), this::updatePageList);
             }
         }
-    }
-
-    private void loadCurrentPage() {
-        Call<PageResult> project = RetrofitInstance.api().getChildPages("photos", currentPage);
-        project.enqueue(new Callback<PageResult>() {
-            @Override
-            public void onResponse(@NonNull Call<PageResult> call, @NonNull Response<PageResult> response) {
-                adapter.addPages(response.body().getResults());
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<PageResult> call, @NonNull Throwable t) {
-                call.cancel();
-            }
-        });
     }
 
     @Override

@@ -1,6 +1,6 @@
 package de.dynamicflash.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class PageResult {
 
     private Integer total;
-    private ArrayList<Page> results;
+    private List<Page> results;
 
     public Integer getTotal() {
         return total;
@@ -21,11 +21,11 @@ public class PageResult {
         this.total = number;
     }
 
-    public ArrayList<Page> getResults() {
+    public List<Page> getResults() {
         return results;
     }
 
-    public void setResults(ArrayList<Page> results) {
+    public void setResults(List<Page> results) {
         this.results = results;
     }
 }
