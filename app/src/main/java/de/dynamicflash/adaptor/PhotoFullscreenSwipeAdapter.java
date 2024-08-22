@@ -7,27 +7,27 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
 
-import de.dynamicflash.R;
+import java.util.List;
+
+import de.dynamicflash.databinding.FullscreenItemBinding;
 import de.dynamicflash.model.Photo;
 
 public class PhotoFullscreenSwipeAdapter extends PagerAdapter {
 
     private final Context context;
-    private final Photo[] photos;
+    private final List<Photo> photos;
     private final String folder;
 
     // constructor
     public PhotoFullscreenSwipeAdapter(Context activity,
-                                       Photo[] photos,
+                                       List<Photo> photos,
                                        String folder) {
         this.context = activity;
         this.photos = photos;
@@ -36,7 +36,7 @@ public class PhotoFullscreenSwipeAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return this.photos.length;
+        return this.photos.size();
     }
 
     @Override
@@ -51,31 +51,26 @@ public class PhotoFullscreenSwipeAdapter extends PagerAdapter {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        assert inflater != null;
-        View viewLayout = inflater.inflate(R.layout.fullscreen_item, container,
-                false);
+        FullscreenItemBinding binding = FullscreenItemBinding.inflate(inflater, container, false);
 
 
-        ImageView imgDisplay = viewLayout.findViewById(R.id.imageID);
-        TextView label = viewLayout.findViewById(R.id.labelID);
-
-        Photo photo = photos[position];
+        Photo photo = photos.get(position);
 
         if (photo.getComment().isEmpty()) {
-            label.setVisibility(View.GONE);
+            binding.labelID.setVisibility(View.GONE);
         } else {
-            label.setText(photo.getComment());
+            binding.labelID.setText(photo.getComment());
         }
 
         final String uri = String.format("%s/%s/%s?w=1920&h=1280&fit=inside%s", IMAGE_BASE_URL, folder, photo.getFilename(), EXTRA_IMAGE_URL_PARAMS);
 
         Glide.with(context)
                 .load(uri)
-                .into(imgDisplay);
+                .into(binding.imageID);
 
-        container.addView(viewLayout);
+        container.addView(binding.getRoot());
 
-        return viewLayout;
+        return binding.getRoot();
     }
 
     @Override
