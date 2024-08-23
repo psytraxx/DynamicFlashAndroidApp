@@ -1,8 +1,7 @@
 package de.dynamicflash.activity;
 
+import android.app.Activity;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import de.dynamicflash.GalleryApplication;
 import de.dynamicflash.adaptor.PhotoFullscreenSwipeAdapter;
@@ -14,7 +13,7 @@ import de.dynamicflash.databinding.ViewpagerBinding;
  * Date: 09/11/13
  * Time: 18:31
  */
-public class PhotoFullscreenSwipeActivity extends AppCompatActivity {
+public class PhotoFullscreenSwipeActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

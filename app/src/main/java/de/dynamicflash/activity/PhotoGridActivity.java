@@ -3,7 +3,7 @@ package de.dynamicflash.activity;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import de.dynamicflash.R;
@@ -17,7 +17,7 @@ import de.dynamicflash.fragment.PhotoGridFragment;
  * Time: 18:29
  */
 
-public class PhotoGridActivity extends AppCompatActivity {
+public class PhotoGridActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
