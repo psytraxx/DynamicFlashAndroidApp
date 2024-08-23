@@ -17,7 +17,7 @@ import androidx.fragment.app.FragmentManager;
 import de.dynamicflash.R;
 import de.dynamicflash.databinding.DrawerBinding;
 import de.dynamicflash.fragment.GalleryListFragment;
-import de.dynamicflash.fragment.ProjectListFragment;
+import de.dynamicflash.fragment.ProjectFragment;
 
 /**
  * Created by eric on 01/08/2014.
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new GalleryListFragment();
                 break;
             case 1:
-                fragment = new ProjectListFragment();
+                fragment = new ProjectFragment();
                 break;
             case 2:
 
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.content_left, fragment).commit();
+            fragmentManager.beginTransaction().replace(binding.contentLeft.getId(), fragment).commit();
 
             // update selected item and title, then close the drawer
             binding.leftDrawer.setItemChecked(position, true);

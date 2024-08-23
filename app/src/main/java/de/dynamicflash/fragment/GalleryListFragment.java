@@ -16,9 +16,9 @@ import androidx.lifecycle.ViewModelProvider;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.dynamicflash.R;
 import de.dynamicflash.activity.PhotoGridActivity;
 import de.dynamicflash.adaptor.GalleryListAdapter;
+import de.dynamicflash.databinding.DrawerBinding;
 import de.dynamicflash.model.Page;
 import de.dynamicflash.model.PageViewModel;
 
@@ -35,11 +35,15 @@ public class GalleryListFragment extends ListFragment implements AbsListView.OnS
     private PageViewModel viewModel;
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         // Initialize ViewModel
         viewModel = new ViewModelProvider(this).get(PageViewModel.class);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         adapter = new GalleryListAdapter(getContext(), new ArrayList<>());
         setListAdapter(adapter);
@@ -55,8 +59,9 @@ public class GalleryListFragment extends ListFragment implements AbsListView.OnS
         Page selection = (Page) l.getItemAtPosition(position);
 
         if (selection != null) {
+            DrawerBinding binding = DrawerBinding.inflate(getLayoutInflater());
 
-            View view = getActivity().findViewById(R.id.content_right);
+            View view = binding.contentRight;
 
             if (view == null) {
                 // DisplayFragment (Fragment B) is not in the layout (handset layout),
@@ -75,7 +80,7 @@ public class GalleryListFragment extends ListFragment implements AbsListView.OnS
                 Bundle bundle = new Bundle();
                 bundle.putString("folder", selection.getFolder());
                 fragment.setArguments(bundle);
-                fragmentManager.beginTransaction().replace(R.id.content_right, fragment).commit();
+                fragmentManager.beginTransaction().replace(binding.contentRight.getId(), fragment).commit();
             }
         }
     }

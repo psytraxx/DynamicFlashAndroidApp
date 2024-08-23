@@ -8,13 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 
 import de.dynamicflash.R;
+import de.dynamicflash.databinding.PhotoGridItemBinding;
 import de.dynamicflash.model.Photo;
 
 public class PhotoListAdapter extends ArrayAdapter<Photo> {
@@ -33,14 +33,14 @@ public class PhotoListAdapter extends ArrayAdapter<Photo> {
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+        PhotoGridItemBinding binding;
 
-        ViewHolder holder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.photo_grid_item, parent, false);
-            holder = new ViewHolder(convertView);
-            convertView.setTag(holder);
+            binding = PhotoGridItemBinding.inflate(LayoutInflater.from(context), parent, false);
+            convertView = binding.getRoot();
+            convertView.setTag(binding);
         } else {
-            holder = (ViewHolder) convertView.getTag();
+            binding = (PhotoGridItemBinding) convertView.getTag();
         }
 
         // Check position validity before accessing item
@@ -51,19 +51,11 @@ public class PhotoListAdapter extends ArrayAdapter<Photo> {
 
                 Glide.with(context)
                         .load(uri)
-                        .into(holder.image);
+                        .into(binding.image);
             }
         }
 
         return convertView;
     }
 
-    // ViewHolder class with constructor for view initialization
-    static class ViewHolder {
-        ImageView image;
-
-        ViewHolder(View view) {
-            image = view.findViewById(R.id.imageID);
-        }
-    }
 }

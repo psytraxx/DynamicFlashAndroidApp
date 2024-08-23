@@ -3,13 +3,13 @@ package de.dynamicflash.adaptor;
 import static de.dynamicflash.helper.DynamicFlashAppGlideModule.EXTRA_IMAGE_URL_PARAMS;
 import static de.dynamicflash.helper.DynamicFlashAppGlideModule.IMAGE_BASE_URL;
 
+import android.content.Context;
 import android.text.Html;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
@@ -27,11 +27,11 @@ import de.dynamicflash.model.Page;
  */
 public class ProjectSwipeAdapter extends PagerAdapter {
     private final ArrayList<Page> pages;
-    private final FragmentActivity activity;
+    private final Context context;
 
-    public ProjectSwipeAdapter(FragmentActivity context, ArrayList<Page> pages) {
+    public ProjectSwipeAdapter(Context context, ArrayList<Page> pages) {
         this.pages = pages;
-        this.activity = context;
+        this.context = context;
     }
 
     @Override
@@ -43,7 +43,10 @@ public class ProjectSwipeAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
 
-        ProjectItemBinding binding = ProjectItemBinding.inflate(activity.getLayoutInflater(), container, false);
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        ProjectItemBinding binding = ProjectItemBinding.inflate(inflater, container, false);
 
         Page project = pages.get(position);
 
@@ -57,9 +60,9 @@ public class ProjectSwipeAdapter extends PagerAdapter {
 
         final String uri = IMAGE_BASE_URL + project.getImage() + "?w=1920&h=1280&fit=inside" + EXTRA_IMAGE_URL_PARAMS;
 
-        Glide.with(activity)
+        Glide.with(context)
                 .load(uri)
-                .into(binding.imageID);
+                .into(binding.image);
 
         container.addView(binding.getRoot());
 

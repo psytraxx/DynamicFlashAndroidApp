@@ -53,7 +53,6 @@ public class PhotoFullscreenSwipeAdapter extends PagerAdapter {
 
         FullscreenItemBinding binding = FullscreenItemBinding.inflate(inflater, container, false);
 
-
         Photo photo = photos.get(position);
 
         if (photo.getComment().isEmpty()) {
@@ -66,7 +65,7 @@ public class PhotoFullscreenSwipeAdapter extends PagerAdapter {
 
         Glide.with(context)
                 .load(uri)
-                .into(binding.imageID);
+                .into(binding.image);
 
         container.addView(binding.getRoot());
 
