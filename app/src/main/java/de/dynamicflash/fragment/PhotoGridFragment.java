@@ -8,23 +8,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
-import java.util.List;
 
 import de.dynamicflash.GalleryApplication;
 import de.dynamicflash.R;
 import de.dynamicflash.activity.PhotoFullscreenSwipeActivity;
 import de.dynamicflash.adaptor.PhotoListAdapter;
-import de.dynamicflash.model.Page;
-import de.dynamicflash.model.Photo;
 import de.dynamicflash.model.PhotoViewModel;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 /**
@@ -70,16 +61,13 @@ public class PhotoGridFragment extends Fragment {
 
         String folder = getArguments().getString("folder");
         // setting grid view adapter
-        adapter = new PhotoListAdapter(getActivity(),folder);
+        adapter = new PhotoListAdapter(getActivity(), folder);
         view.setAdapter(adapter);
 
-        viewModel.getPhotosByAlbumName(folder).observe(this, new Observer<List<Photo>>() {
-            @Override
-            public void onChanged(List<Photo> photos) {
-                final GalleryApplication application = (GalleryApplication) getActivity().getApplication();
-                application.setCurrentPhotos(photos);
-                adapter.addAll(photos);
-            }
+        viewModel.getPhotosByAlbumName(folder).observe(this, photos -> {
+            final GalleryApplication application = (GalleryApplication) getActivity().getApplication();
+            application.setCurrentPhotos(photos);
+            adapter.addAll(photos);
         });
     }
 }

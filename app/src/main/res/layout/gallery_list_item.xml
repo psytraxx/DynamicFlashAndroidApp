@@ -2,32 +2,37 @@
 
 
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-     android:layout_margin="5dp"
-             android:layout_height="match_parent">
-    <TableRow >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp">
+
+    <TableRow>
 
 
         <TextView
-                android:id="@+id/titleID"
-                android:layout_width="match_parent"
+            android:id="@+id/titleID"
+            android:layout_width="match_parent"
 
-                android:text="@string/gallery_title" android:textStyle="bold"
-                android:typeface="sans"
-            android:textSize="20sp" android:textColor="@android:color/secondary_text_light"
-            android:padding="4sp" />
+            android:padding="4sp"
+            android:text="@string/gallery_title"
+            android:textColor="@android:color/secondary_text_light"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:typeface="sans" />
     </TableRow>
-    <TableRow >
+
+    <TableRow>
 
         <TextView
-                android:id="@+id/textID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:typeface="sans"
-                android:maxLines="3"
-                android:lines="3"
-                android:layout_weight="1.0"
-                android:padding="4sp" android:gravity="start"/>
+            android:id="@+id/textID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:gravity="start"
+            android:lines="3"
+            android:maxLines="3"
+            android:padding="4sp"
+            android:typeface="sans" />
     </TableRow>
 </TableLayout>
 

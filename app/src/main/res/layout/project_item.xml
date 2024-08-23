@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="match_parent" >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <de.dynamicflash.helper.TouchImageView
-            android:id="@+id/imageID"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:scaleType="fitCenter" android:contentDescription="@string/touch_image_description"/>
+        android:id="@+id/imageID"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:contentDescription="@string/touch_image_description"
+        android:scaleType="fitCenter" />
 
     <TextView
-            style="@style/ImageTitle"
-            android:text="@string/title" android:id="@+id/labelID" android:layout_above="@+id/descriptionID" />
+        android:id="@+id/labelID"
+        style="@style/ImageTitle"
+        android:layout_above="@+id/descriptionID"
+        android:text="@string/title" />
 
     <TextView
-            style="@style/ImageDescription"
-            android:text="@string/text_label" android:id="@+id/descriptionID"
-            android:layout_alignParentBottom="true"/>
+        android:id="@+id/descriptionID"
+        style="@style/ImageDescription"
+        android:layout_alignParentBottom="true"
+        android:text="@string/text_label" />
 
 </RelativeLayout>

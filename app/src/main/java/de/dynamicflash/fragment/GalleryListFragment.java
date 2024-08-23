@@ -19,8 +19,8 @@ import java.util.List;
 import de.dynamicflash.R;
 import de.dynamicflash.activity.PhotoGridActivity;
 import de.dynamicflash.adaptor.GalleryListAdapter;
-import de.dynamicflash.model.PageViewModel;
 import de.dynamicflash.model.Page;
+import de.dynamicflash.model.PageViewModel;
 
 /**
  * Created with IntelliJ IDEA.
