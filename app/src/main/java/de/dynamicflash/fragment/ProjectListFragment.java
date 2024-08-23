@@ -44,7 +44,7 @@ public class ProjectListFragment extends Fragment {
             ProjectSwipeAdapter adapter = new ProjectSwipeAdapter(getActivity(), new ArrayList<>(pages));
             View view = getView();
             assert view != null;
-            ViewPager viewPager = view.findViewById(R.id.pagerID);
+            ViewPager viewPager = view.findViewById(R.id.pager);
             viewPager.setAdapter(adapter);
         });
 

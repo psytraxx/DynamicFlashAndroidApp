@@ -3,11 +3,9 @@ package de.dynamicflash.activity;
 import android.app.Activity;
 import android.os.Bundle;
 
-import androidx.viewpager.widget.ViewPager;
-
 import de.dynamicflash.GalleryApplication;
-import de.dynamicflash.R;
 import de.dynamicflash.adaptor.PhotoFullscreenSwipeAdapter;
+import de.dynamicflash.databinding.ViewpagerBinding;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,10 +19,9 @@ public class PhotoFullscreenSwipeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.viewpager);
+        ViewpagerBinding binding = ViewpagerBinding.inflate(getLayoutInflater());
 
-
-        ViewPager viewPager = findViewById(R.id.pagerID);
+        setContentView(binding.getRoot());
 
         String folder = getIntent().getStringExtra("folder");
 
@@ -33,8 +30,8 @@ public class PhotoFullscreenSwipeActivity extends Activity {
 
         int position = getIntent().getIntExtra("position", 0);
 
-        viewPager.setAdapter(adapter);
-        viewPager.setCurrentItem(position);
+        binding.pager.setAdapter(adapter);
+        binding.pager.setCurrentItem(position);
 
     }
 

@@ -6,17 +6,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import de.dynamicflash.R;
+import de.dynamicflash.databinding.DrawerBinding;
 import de.dynamicflash.fragment.GalleryListFragment;
 import de.dynamicflash.fragment.ProjectListFragment;
 
@@ -26,27 +25,26 @@ import de.dynamicflash.fragment.ProjectListFragment;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private ListView mDrawerList;
-    private DrawerLayout mDrawerLayout;
     private String[] mDrawerEntries;
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
+    private DrawerBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.drawer);
+
+        binding = DrawerBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         mDrawerEntries = new String[]{getString(R.string.title_photos), getString(R.string.title_projects)};
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-        mDrawerList = findViewById(R.id.left_drawer);
 
         // Set the adapter for the list view
-        mDrawerList.setAdapter(new ArrayAdapter<>(this,
+        binding.leftDrawer.setAdapter(new ArrayAdapter<>(this,
                 R.layout.drawer_list_item, mDrawerEntries));
         // Set the list's click listener
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        binding.leftDrawer.setOnItemClickListener(new DrawerItemClickListener());
 
         mTitle = mDrawerTitle = getTitle();
 
@@ -60,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         // between the sliding drawer and the action bar app icon
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
-                mDrawerLayout,         /* DrawerLayout object */
+                binding.drawerLayout,         /* DrawerLayout object */
                 R.string.drawer_open,  /* "open drawer" description for accessibility */
                 R.string.drawer_close  /* "close drawer" description for accessibility */
         ) {
@@ -75,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        mDrawerLayout.addDrawerListener(mDrawerToggle);
+        binding.drawerLayout.addDrawerListener(mDrawerToggle);
 
         if (savedInstanceState == null) {
             selectItem(0);
@@ -101,9 +99,9 @@ public class MainActivity extends AppCompatActivity {
             fragmentManager.beginTransaction().replace(R.id.content_left, fragment).commit();
 
             // update selected item and title, then close the drawer
-            mDrawerList.setItemChecked(position, true);
+            binding.leftDrawer.setItemChecked(position, true);
             setTitle(mDrawerEntries[position]);
-            mDrawerLayout.closeDrawer(mDrawerList);
+            binding.drawerLayout.closeDrawer(binding.leftDrawer);
         }
     }
 
@@ -139,6 +137,12 @@ public class MainActivity extends AppCompatActivity {
         // Handle your other action bar items...
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 
     private class DrawerItemClickListener implements android.widget.AdapterView.OnItemClickListener {
