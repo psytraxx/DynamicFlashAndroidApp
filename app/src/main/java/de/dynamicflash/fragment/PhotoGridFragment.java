@@ -39,7 +39,7 @@ public class PhotoGridFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         PhotoGridBinding binding = PhotoGridBinding.inflate(inflater, container, false);

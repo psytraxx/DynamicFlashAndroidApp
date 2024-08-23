@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import java.util.ArrayList;
 
@@ -42,7 +42,7 @@ public class ProjectFragment extends Fragment {
         // Observe LiveData from ViewModel
         viewModel.getChildPages("projects", 1).observe(getViewLifecycleOwner(), pages -> {
             ProjectSwipeAdapter adapter = new ProjectSwipeAdapter(getActivity(), new ArrayList<>(pages));
-            ViewPager viewPager = binding.pager;
+            ViewPager2 viewPager = binding.pager;
             viewPager.setAdapter(adapter);
         });
 

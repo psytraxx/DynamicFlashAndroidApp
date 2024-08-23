@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.viewpager.widget.PagerAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
@@ -25,7 +25,7 @@ import de.dynamicflash.model.Page;
  * Date: 11/16/13
  * Time: 4:00 PM
  */
-public class ProjectSwipeAdapter extends PagerAdapter {
+public class ProjectSwipeAdapter extends RecyclerView.Adapter<ProjectSwipeAdapter.ProjectViewHolder> {
     private final ArrayList<Page> pages;
     private final Context context;
 
@@ -34,48 +34,45 @@ public class ProjectSwipeAdapter extends PagerAdapter {
         this.context = context;
     }
 
-    @Override
-    public int getCount() {
-        return pages.size();
-    }
-
     @NonNull
     @Override
-    public Object instantiateItem(@NonNull ViewGroup container, int position) {
+    public ProjectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(context);
+        ProjectItemBinding binding = ProjectItemBinding.inflate(inflater, parent, false);
+        return new ProjectViewHolder(binding);
+    }
 
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        ProjectItemBinding binding = ProjectItemBinding.inflate(inflater, container, false);
-
+    @Override
+    public void onBindViewHolder(@NonNull ProjectViewHolder holder, int position) {
         Page project = pages.get(position);
 
         if (project.getTitle().isEmpty()) {
-            binding.labelID.setVisibility(View.GONE);
+            holder.binding.labelID.setVisibility(View.GONE);
         } else {
-            binding.labelID.setText(project.getTitle());
+            holder.binding.labelID.setText(project.getTitle());
         }
 
-        binding.descriptionID.setText(Html.fromHtml(project.getDescription(), Html.FROM_HTML_MODE_COMPACT));
+        holder.binding.descriptionID.setText(Html.fromHtml(project.getDescription(), Html.FROM_HTML_MODE_COMPACT));
 
         final String uri = IMAGE_BASE_URL + project.getImage() + "?w=1920&h=1280&fit=inside" + EXTRA_IMAGE_URL_PARAMS;
 
         Glide.with(context)
                 .load(uri)
-                .into(binding.image);
-
-        container.addView(binding.getRoot());
-
-        return binding.getRoot();
+                .into(holder.binding.image);
     }
 
     @Override
-    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-        return view == object;
+    public int getItemCount() {
+        return pages.size();
     }
 
-    @Override
-    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        container.removeView((View) object);
+    public static class ProjectViewHolder extends RecyclerView.ViewHolder {
+        final ProjectItemBinding binding;
+
+        public ProjectViewHolder(ProjectItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
     }
 }
+

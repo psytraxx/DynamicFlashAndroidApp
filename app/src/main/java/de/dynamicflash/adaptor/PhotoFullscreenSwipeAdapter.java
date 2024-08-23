@@ -7,19 +7,18 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
-import androidx.viewpager.widget.PagerAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import de.dynamicflash.databinding.FullscreenItemBinding;
+import de.dynamicflash.databinding.ProjectItemBinding;
 import de.dynamicflash.model.Photo;
 
-public class PhotoFullscreenSwipeAdapter extends PagerAdapter {
+public class PhotoFullscreenSwipeAdapter extends RecyclerView.Adapter<PhotoFullscreenSwipeAdapter.PhotoFullScreenViewHolder> {
 
     private final Context context;
     private final List<Photo> photos;
@@ -34,46 +33,42 @@ public class PhotoFullscreenSwipeAdapter extends PagerAdapter {
         this.folder = folder;
     }
 
-    @Override
-    public int getCount() {
-        return this.photos.size();
-    }
-
-    @Override
-    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-        return view == object;
-    }
-
     @NonNull
     @Override
-    public Object instantiateItem(@NonNull ViewGroup container, int position) {
+    public PhotoFullScreenViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(context);
+        ProjectItemBinding binding = ProjectItemBinding.inflate(inflater, parent, false);
+        return new PhotoFullscreenSwipeAdapter.PhotoFullScreenViewHolder(binding);
+    }
 
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        FullscreenItemBinding binding = FullscreenItemBinding.inflate(inflater, container, false);
-
+    @Override
+    public void onBindViewHolder(@NonNull PhotoFullScreenViewHolder holder, int position) {
         Photo photo = photos.get(position);
 
         if (photo.getComment().isEmpty()) {
-            binding.labelID.setVisibility(View.GONE);
+            holder.binding.labelID.setVisibility(View.GONE);
         } else {
-            binding.labelID.setText(photo.getComment());
+            holder.binding.labelID.setText(photo.getComment());
         }
 
         final String uri = String.format("%s/%s/%s?w=1920&h=1280&fit=inside%s", IMAGE_BASE_URL, folder, photo.getFilename(), EXTRA_IMAGE_URL_PARAMS);
 
         Glide.with(context)
                 .load(uri)
-                .into(binding.image);
-
-        container.addView(binding.getRoot());
-
-        return binding.getRoot();
+                .into(holder.binding.image);
     }
 
     @Override
-    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        container.removeView((RelativeLayout) object);
+    public int getItemCount() {
+        return this.photos.size();
+    }
+
+    public static class PhotoFullScreenViewHolder extends RecyclerView.ViewHolder {
+        final ProjectItemBinding binding;
+
+        public PhotoFullScreenViewHolder(ProjectItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
     }
 }
