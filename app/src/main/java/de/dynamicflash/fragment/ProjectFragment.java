@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager2.widget.ViewPager2;
 
 import java.util.ArrayList;
 
@@ -26,6 +25,7 @@ import de.dynamicflash.model.PageViewModel;
 public class ProjectFragment extends Fragment {
 
     private PageViewModel viewModel;
+    private ViewpagerBinding binding;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,16 +37,25 @@ public class ProjectFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ViewpagerBinding binding = ViewpagerBinding.inflate(inflater, container, false);
+        binding = ViewpagerBinding.inflate(inflater, container, false);
+        // Inflate the layout for this fragment
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         // Observe LiveData from ViewModel
         viewModel.getChildPages("projects", 1).observe(getViewLifecycleOwner(), pages -> {
             ProjectSwipeAdapter adapter = new ProjectSwipeAdapter(getActivity(), new ArrayList<>(pages));
-            ViewPager2 viewPager = binding.pager;
-            viewPager.setAdapter(adapter);
+            binding.pager.setAdapter(adapter);
         });
+    }
 
-        // Inflate the layout for this fragment
-        return binding.getRoot();
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }

@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.GridView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +29,7 @@ import de.dynamicflash.model.PhotoViewModel;
 public class PhotoGridFragment extends Fragment {
 
     private PhotoViewModel viewModel;
+    private PhotoGridBinding binding;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class PhotoGridFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        PhotoGridBinding binding = PhotoGridBinding.inflate(inflater, container, false);
+        binding = PhotoGridBinding.inflate(inflater, container, false);
 
         // Inflate the layout for this fragment
         return binding.getRoot();
@@ -52,19 +52,25 @@ public class PhotoGridFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        GridView gridView = (GridView) view;
-        gridView.setOnItemClickListener(itemClickListener);
+
+        binding.photoGridID.setOnItemClickListener(itemClickListener);
 
         String folder = getArguments().getString("folder");
         // setting grid view adapter
         PhotoListAdapter adapter = new PhotoListAdapter(getActivity(), folder);
-        gridView.setAdapter(adapter);
+        binding.photoGridID.setAdapter(adapter);
 
         viewModel.getPhotosByAlbumName(folder).observe(getViewLifecycleOwner(), photos -> {
             final GalleryApplication application = (GalleryApplication) getActivity().getApplication();
             application.setCurrentPhotos(photos);
             adapter.addAll(photos);
         });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 
     private final AdapterView.OnItemClickListener itemClickListener = (parent, v, position, id) -> {
