@@ -46,9 +46,9 @@ public class PhotoFullscreenSwipeAdapter extends RecyclerView.Adapter<PhotoFulls
         Photo photo = photos.get(position);
 
         if (photo.getComment().isEmpty()) {
-            holder.binding.labelID.setVisibility(View.GONE);
+            holder.binding.label.setVisibility(View.GONE);
         } else {
-            holder.binding.labelID.setText(photo.getComment());
+            holder.binding.label.setText(photo.getComment());
         }
 
         final String uri = String.format("%s/%s/%s?w=1920&h=1280&fit=inside%s", IMAGE_BASE_URL, folder, photo.getFilename(), EXTRA_IMAGE_URL_PARAMS);

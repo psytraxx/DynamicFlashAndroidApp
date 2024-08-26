@@ -12,13 +12,13 @@
         android:scaleType="fitCenter" />
 
     <TextView
-        android:id="@+id/labelID"
+        android:id="@+id/label"
         style="@style/ImageTitle"
-        android:layout_above="@+id/descriptionID"
+        android:layout_above="@+id/description"
         android:text="@string/title" />
 
     <TextView
-        android:id="@+id/descriptionID"
+        android:id="@+id/description"
         style="@style/ImageDescription"
         android:layout_alignParentBottom="true"
         android:text="@string/text_label" />
