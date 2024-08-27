@@ -6,16 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.GridView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import de.dynamicflash.GalleryApplication;
+import de.dynamicflash.R;
 import de.dynamicflash.activity.PhotoFullscreenSwipeActivity;
 import de.dynamicflash.adaptor.PhotoListAdapter;
-import de.dynamicflash.databinding.PhotoGridBinding;
 import de.dynamicflash.model.PhotoViewModel;
 
 
@@ -28,51 +27,6 @@ import de.dynamicflash.model.PhotoViewModel;
 
 public class PhotoGridFragment extends Fragment {
 
-    private PhotoViewModel viewModel;
-    private PhotoGridBinding binding;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // Initialize ViewModel
-        viewModel = new ViewModelProvider(this).get(PhotoViewModel.class);
-    }
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        binding = PhotoGridBinding.inflate(inflater, container, false);
-
-        // Inflate the layout for this fragment
-        return binding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-
-        binding.photoGridID.setOnItemClickListener(itemClickListener);
-
-        String folder = getArguments().getString("folder");
-        // setting grid view adapter
-        PhotoListAdapter adapter = new PhotoListAdapter(getActivity(), folder);
-        binding.photoGridID.setAdapter(adapter);
-
-        viewModel.getPhotosByAlbumName(folder).observe(getViewLifecycleOwner(), photos -> {
-            final GalleryApplication application = (GalleryApplication) getActivity().getApplication();
-            application.setCurrentPhotos(photos);
-            adapter.addAll(photos);
-        });
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        binding = null;
-    }
-
     private final AdapterView.OnItemClickListener itemClickListener = (parent, v, position, id) -> {
         // on selecting grid view image
         // launch full screen activity
@@ -81,4 +35,39 @@ public class PhotoGridFragment extends Fragment {
         i.putExtra("folder", getArguments().getString("folder"));
         startActivity(i);
     };
+    private PhotoListAdapter adapter;
+    private PhotoViewModel viewModel;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        // Initialize ViewModel
+        viewModel = new ViewModelProvider(this).get(PhotoViewModel.class);
+
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_photo_grid, container, false);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        GridView view = (GridView) getView();
+        if (view == null) {
+            return;
+        }
+        view.setOnItemClickListener(itemClickListener);
+
+        String folder = getArguments().getString("folder");
+        // setting grid view adapter
+        adapter = new PhotoListAdapter(getActivity(), folder);
+        view.setAdapter(adapter);
+
+        viewModel.getPhotosByAlbumName(folder).observe(this, photos -> {
+            final GalleryApplication application = (GalleryApplication) getActivity().getApplication();
+            application.setCurrentPhotos(photos);
+            adapter.addAll(photos);
+        });
+    }
 }

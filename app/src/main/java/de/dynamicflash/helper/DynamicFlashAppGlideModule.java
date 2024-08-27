@@ -3,9 +3,9 @@ package de.dynamicflash.helper;
 import static de.dynamicflash.helper.OkHttpClientImpl.instance;
 
 import android.content.Context;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.GlideBuilder;
@@ -24,21 +24,19 @@ public class DynamicFlashAppGlideModule extends AppGlideModule {
 
     public static final String EXTRA_IMAGE_URL_PARAMS = "&fm=avif";
 
-    public static final String IMAGE_BASE_URL = "https://images.dynamicflash.de/";
+    public static final String IMAGE_BASE_URL = "https://images.dynamicflash.de";
 
     private static final int GLIDE_REQUEST_TIMEOUT_MS = 30000;
 
     @Override
     public void applyOptions(@NonNull Context context, @NonNull GlideBuilder builder) {
-        CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(context);
-        circularProgressDrawable.setStrokeWidth(5f);
-        circularProgressDrawable.setCenterRadius(30);
-        circularProgressDrawable.start();
+        ProgressBar progressBar = new ProgressBar(context);
+        progressBar.setIndeterminate(true);
 
         int cacheSize = 30 * 1024 * 1024; // 10 MiB
 
         builder.setDiskCache(new InternalCacheDiskCacheFactory(context, cacheSize));
-        builder.setDefaultRequestOptions(new RequestOptions().timeout(GLIDE_REQUEST_TIMEOUT_MS).placeholder(circularProgressDrawable));
+        builder.setDefaultRequestOptions(new RequestOptions().timeout(GLIDE_REQUEST_TIMEOUT_MS).placeholder(progressBar.getIndeterminateDrawable()));
         super.applyOptions(context, builder);
     }
 

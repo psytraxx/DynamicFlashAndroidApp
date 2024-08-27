@@ -1,0 +1,21 @@
+<androidx.slidingpanelayout.widget.SlidingPaneLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sliding_pane_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/gallery_list"
+        android:layout_width="280dp"
+        android:layout_height="match_parent" />
+
+    <!-- The second child becomes the right (content) pane. In this example,
+        android:layout_weight is used to expand this detail pane to consume
+        leftover available space when the entire window is wide enough to fit
+        the left and right pane.-->
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/photo_grid_container"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+</androidx.slidingpanelayout.widget.SlidingPaneLayout>

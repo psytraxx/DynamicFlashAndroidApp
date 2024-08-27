@@ -4,20 +4,22 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import de.dynamicflash.R;
-import de.dynamicflash.databinding.DrawerBinding;
-import de.dynamicflash.fragment.GalleryListFragment;
+import de.dynamicflash.adaptor.DrawerAdapter;
+import de.dynamicflash.fragment.GalleryFragment;
 import de.dynamicflash.fragment.ProjectFragment;
+import de.dynamicflash.helper.RecyclerItemClickListener;
 
 /**
  * Created by eric on 01/08/2014.
@@ -25,28 +27,42 @@ import de.dynamicflash.fragment.ProjectFragment;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private String[] mDrawerEntries;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private CharSequence mDrawerTitle;
-    private CharSequence mTitle;
-    private DrawerBinding binding;
+    private RecyclerView drawerRecyclerView;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
+    private CharSequence drawerTitle;
+    private CharSequence title;
+
+    private String[] drawerEntries = new String[0];
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        binding = DrawerBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        drawerEntries = new String[]{getString(R.string.title_photos), getString(R.string.title_projects)};
 
-        mDrawerEntries = new String[]{getString(R.string.title_photos), getString(R.string.title_projects)};
+        drawerLayout = findViewById(R.id.drawer_layout);
+        drawerRecyclerView = findViewById(R.id.left_drawer);
+        drawerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Set the adapter for the list view
-        binding.leftDrawer.setAdapter(new ArrayAdapter<>(this,
-                R.layout.drawer_list_item, mDrawerEntries));
+        drawerRecyclerView.setAdapter(new DrawerAdapter(drawerEntries));
         // Set the list's click listener
-        binding.leftDrawer.setOnItemClickListener(new DrawerItemClickListener());
+        drawerRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, drawerRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                selectItem(position);
+            }
 
-        mTitle = mDrawerTitle = getTitle();
+            @Override
+            public void onLongItemClick(View view, int position) {
+                // do whatever
+            }
+        }));
+
+        title = drawerTitle = getTitle();
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
         final ActionBar actionBar = getSupportActionBar();
@@ -56,24 +72,24 @@ public class MainActivity extends AppCompatActivity {
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the sliding drawer and the action bar app icon
-        mDrawerToggle = new ActionBarDrawerToggle(
+        drawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
-                binding.drawerLayout,         /* DrawerLayout object */
+                drawerLayout,         /* DrawerLayout object */
                 R.string.drawer_open,  /* "open drawer" description for accessibility */
                 R.string.drawer_close  /* "close drawer" description for accessibility */
         ) {
             public void onDrawerClosed(View view) {
-                actionBar.setTitle(mTitle);
+                actionBar.setTitle(title);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
             public void onDrawerOpened(View drawerView) {
-                actionBar.setTitle(mDrawerTitle);
+                actionBar.setTitle(drawerTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
 
-        binding.drawerLayout.addDrawerListener(mDrawerToggle);
+        drawerLayout.addDrawerListener(drawerToggle);
 
         if (savedInstanceState == null) {
             selectItem(0);
@@ -85,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment = null;
         switch (position) {
             case 0:
-                fragment = new GalleryListFragment();
+                fragment = new GalleryFragment();
                 break;
             case 1:
                 fragment = new ProjectFragment();
@@ -96,12 +112,12 @@ public class MainActivity extends AppCompatActivity {
 
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(binding.contentLeft.getId(), fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
             // update selected item and title, then close the drawer
-            binding.leftDrawer.setItemChecked(position, true);
-            setTitle(mDrawerEntries[position]);
-            binding.drawerLayout.closeDrawer(binding.leftDrawer);
+            drawerRecyclerView.setSelected(true);
+            setTitle(drawerEntries[position]);
+            drawerLayout.closeDrawer(drawerRecyclerView);
         }
     }
 
@@ -109,47 +125,33 @@ public class MainActivity extends AppCompatActivity {
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggles
-        mDrawerToggle.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
     public void setTitle(CharSequence title) {
-        mTitle = title;
+        this.title = title;
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setTitle(mTitle);
+        actionBar.setTitle(this.title);
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
+        drawerToggle.syncState();
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Pass the event to ActionBarDrawerToggle, if it returns
         // true, then it has handled the app icon touch event
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
         // Handle your other action bar items...
 
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        binding = null;
-    }
-
-    private class DrawerItemClickListener implements android.widget.AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-            selectItem(position);
-        }
-    }
-
 }

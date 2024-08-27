@@ -47,14 +47,14 @@ public class ProjectSwipeAdapter extends RecyclerView.Adapter<ProjectSwipeAdapte
         Page project = pages.get(position);
 
         if (project.getTitle().isEmpty()) {
-            holder.binding.labelID.setVisibility(View.GONE);
+            holder.binding.label.setVisibility(View.GONE);
         } else {
-            holder.binding.labelID.setText(project.getTitle());
+            holder.binding.label.setText(project.getTitle());
         }
 
-        holder.binding.descriptionID.setText(Html.fromHtml(project.getDescription(), Html.FROM_HTML_MODE_COMPACT));
+        holder.binding.description.setText(Html.fromHtml(project.getDescription(), Html.FROM_HTML_MODE_COMPACT));
 
-        final String uri = IMAGE_BASE_URL + project.getImage() + "?w=1920&h=1280&fit=inside" + EXTRA_IMAGE_URL_PARAMS;
+        final String uri = String.format("%s/%s?w=1920&h=1280&fit=inside%s", IMAGE_BASE_URL, project.getImage(), EXTRA_IMAGE_URL_PARAMS);
 
         Glide.with(context)
                 .load(uri)

@@ -11,7 +11,7 @@
         android:scaleType="fitCenter" />
 
     <TextView
-        android:id="@+id/labelID"
+        android:id="@+id/label"
         style="@style/ImageTitle"
         android:layout_alignParentBottom="true"
         android:text="@string/title_photos" />
