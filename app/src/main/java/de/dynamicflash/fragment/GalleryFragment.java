@@ -15,8 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.slidingpanelayout.widget.SlidingPaneLayout;
 
-import java.util.List;
-
 import de.dynamicflash.R;
 import de.dynamicflash.adaptor.GalleryAdapter;
 import de.dynamicflash.helper.RecyclerItemClickListener;
@@ -50,7 +48,7 @@ public class GalleryFragment extends Fragment {
         // Initialize ViewModel
         viewModel = new ViewModelProvider(this).get(PageViewModel.class);
         // Observe LiveData from ViewModel
-        viewModel.getChildPages("photos", currentPage).observe(getViewLifecycleOwner(), this::updatePageList);
+        viewModel.getChildPages("photos", currentPage).observe(getViewLifecycleOwner(), pages -> adapter.setPages(pages));
 
         adapter = new GalleryAdapter();
 
@@ -94,16 +92,10 @@ public class GalleryFragment extends Fragment {
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 if (layoutManager != null && layoutManager.findLastVisibleItemPosition() >= adapter.getItemCount() - 4) {
                     currentPage++;
-                    viewModel.getChildPages("photos", currentPage).observe(getViewLifecycleOwner(), GalleryFragment.this::updatePageList);
+                    viewModel.getChildPages("photos", currentPage).observe(getViewLifecycleOwner(), pages -> adapter.setPages(pages));
                 }
             }
         });
     }
-
-    private void updatePageList(List<Page> pages) {
-        adapter.addPages(pages);
-    }
-
-
 }
 

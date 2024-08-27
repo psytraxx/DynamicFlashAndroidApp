@@ -30,7 +30,7 @@ public class PhotoGridFragment extends Fragment {
     private final AdapterView.OnItemClickListener itemClickListener = (parent, v, position, id) -> {
         // on selecting grid view image
         // launch full screen activity
-        Intent i = new Intent(getActivity().getBaseContext(), PhotoFullscreenSwipeActivity.class);
+        Intent i = new Intent(parent.getContext(), PhotoFullscreenSwipeActivity.class);
         i.putExtra("position", position);
         i.putExtra("folder", getArguments().getString("folder"));
         startActivity(i);

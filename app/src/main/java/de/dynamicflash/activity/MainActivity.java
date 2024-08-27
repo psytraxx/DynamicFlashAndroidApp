@@ -15,6 +15,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.dynamicflash.R;
 import de.dynamicflash.adaptor.DrawerAdapter;
 import de.dynamicflash.fragment.GalleryFragment;
@@ -33,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private CharSequence drawerTitle;
     private CharSequence title;
 
-    private String[] drawerEntries = new String[0];
+    private final List<String> drawerEntries = new ArrayList<>();
 
 
     @Override
@@ -41,7 +44,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        drawerEntries = new String[]{getString(R.string.title_photos), getString(R.string.title_projects)};
+        drawerEntries.add(getString(R.string.title_photos));
+        drawerEntries.add(getString(R.string.title_projects));
 
         drawerLayout = findViewById(R.id.drawer_layout);
         drawerRecyclerView = findViewById(R.id.left_drawer);
@@ -116,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
             // update selected item and title, then close the drawer
             drawerRecyclerView.setSelected(true);
-            setTitle(drawerEntries[position]);
+            setTitle(drawerEntries.get(position));
             drawerLayout.closeDrawer(drawerRecyclerView);
         }
     }

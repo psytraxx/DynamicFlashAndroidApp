@@ -6,13 +6,15 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
 import de.dynamicflash.databinding.DrawerListItemBinding;
 
 public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder> {
 
-    private final String[] items;
+    private final List<String> items;
 
-    public DrawerAdapter(String[] items) {
+    public DrawerAdapter(List<String> items) {
         this.items = items;
     }
 
@@ -26,12 +28,12 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(items[position]);
+        holder.bind(items.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return items.length;
+        return items.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

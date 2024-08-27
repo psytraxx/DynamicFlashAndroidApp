@@ -3,7 +3,6 @@ package de.dynamicflash.adaptor;
 import static de.dynamicflash.helper.DynamicFlashAppGlideModule.EXTRA_IMAGE_URL_PARAMS;
 import static de.dynamicflash.helper.DynamicFlashAppGlideModule.IMAGE_BASE_URL;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import de.dynamicflash.databinding.ImageWithDescriptionBinding;
 import de.dynamicflash.model.Page;
@@ -24,25 +23,23 @@ import de.dynamicflash.model.Page;
  * Date: 11/16/13
  * Time: 4:00 PM
  */
-public class ProjectSwipeAdapter extends RecyclerView.Adapter<ProjectSwipeAdapter.ProjectViewHolder> {
-    private final ArrayList<Page> pages;
-    private final Context context;
+public class ProjectSwipeAdapter extends RecyclerView.Adapter<ProjectSwipeAdapter.ViewHolder> {
+    private final List<Page> pages;
 
-    public ProjectSwipeAdapter(Context context, ArrayList<Page> pages) {
+    public ProjectSwipeAdapter(List<Page> pages) {
         this.pages = pages;
-        this.context = context;
     }
 
     @NonNull
     @Override
-    public ProjectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         ImageWithDescriptionBinding binding = ImageWithDescriptionBinding.inflate(inflater, parent, false);
-        return new ProjectViewHolder(binding);
+        return new ViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProjectViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Page project = pages.get(position);
 
         if (project.getTitle().isEmpty()) {
@@ -59,7 +56,7 @@ public class ProjectSwipeAdapter extends RecyclerView.Adapter<ProjectSwipeAdapte
 
         final String uri = String.format("%s/%s?w=1920&h=1280&fit=inside%s", IMAGE_BASE_URL, project.getImage(), EXTRA_IMAGE_URL_PARAMS);
 
-        Glide.with(context)
+        Glide.with(holder.itemView.getContext())
                 .load(uri)
                 .into(holder.binding.image);
     }
@@ -69,10 +66,10 @@ public class ProjectSwipeAdapter extends RecyclerView.Adapter<ProjectSwipeAdapte
         return pages.size();
     }
 
-    public static class ProjectViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         final ImageWithDescriptionBinding binding;
 
-        public ProjectViewHolder(ImageWithDescriptionBinding binding) {
+        public ViewHolder(ImageWithDescriptionBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

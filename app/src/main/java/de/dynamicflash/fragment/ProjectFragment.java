@@ -10,8 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import java.util.ArrayList;
-
 import de.dynamicflash.adaptor.ProjectSwipeAdapter;
 import de.dynamicflash.databinding.ViewpagerBinding;
 import de.dynamicflash.model.PageViewModel;
@@ -48,7 +46,7 @@ public class ProjectFragment extends Fragment {
 
         // Observe LiveData from ViewModel
         viewModel.getChildPages("projects", 1).observe(getViewLifecycleOwner(), pages -> {
-            ProjectSwipeAdapter adapter = new ProjectSwipeAdapter(getActivity(), new ArrayList<>(pages));
+            ProjectSwipeAdapter adapter = new ProjectSwipeAdapter(pages);
             binding.pager.setAdapter(adapter);
         });
     }

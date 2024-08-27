@@ -5,9 +5,7 @@
     <string name="title_projects">Projects</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
-    <string name="title">Title</string>
     <string name="touch_image_description">Touch Image Description</string>
-    <string name="text_label">Text Label</string>
     <string name="gallery_title">Gallery Title</string>
     <string name="image_thumbnail">Image Thumbnail</string>
 </resources>

@@ -18,25 +18,25 @@ import de.dynamicflash.model.Page;
  * Date: 10/11/13
  * Time: 11:08
  */
-public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder> {
+public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
 
     private List<Page> pages;
 
     @NonNull
     @Override
-    public GalleryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         FragmentGalleryItemBinding binding = FragmentGalleryItemBinding.inflate(inflater, parent, false);
-        return new GalleryViewHolder(binding);
+        return new ViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GalleryViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Page page = pages.get(position);
         holder.bind(page);
     }
 
-    public void addPages(List<Page> pages) {
+    public void setPages(List<Page> pages) {
         this.pages = pages;
         notifyItemRangeChanged(0, pages.size());
     }
@@ -50,10 +50,10 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
         return pages.get(position);
     }
 
-    public static class GalleryViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final FragmentGalleryItemBinding binding;
 
-        public GalleryViewHolder(@NonNull FragmentGalleryItemBinding binding) {
+        public ViewHolder(@NonNull FragmentGalleryItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

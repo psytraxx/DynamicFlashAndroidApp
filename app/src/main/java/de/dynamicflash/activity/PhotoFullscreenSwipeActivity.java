@@ -3,9 +3,12 @@ package de.dynamicflash.activity;
 import android.app.Activity;
 import android.os.Bundle;
 
+import java.util.List;
+
 import de.dynamicflash.GalleryApplication;
 import de.dynamicflash.adaptor.PhotoFullscreenSwipeAdapter;
 import de.dynamicflash.databinding.ViewpagerBinding;
+import de.dynamicflash.model.Photo;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,7 +29,8 @@ public class PhotoFullscreenSwipeActivity extends Activity {
         String folder = getIntent().getStringExtra("folder");
 
         // Gridview adapter
-        PhotoFullscreenSwipeAdapter adapter = new PhotoFullscreenSwipeAdapter(PhotoFullscreenSwipeActivity.this, ((GalleryApplication) getApplication()).getCurrentPhotos(), folder);
+        List<Photo> photos = ((GalleryApplication) getApplication()).getCurrentPhotos();
+        PhotoFullscreenSwipeAdapter adapter = new PhotoFullscreenSwipeAdapter(photos, folder);
 
         int position = getIntent().getIntExtra("position", 0);
 

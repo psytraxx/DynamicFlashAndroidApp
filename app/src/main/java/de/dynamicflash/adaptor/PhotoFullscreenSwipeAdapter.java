@@ -3,7 +3,6 @@ package de.dynamicflash.adaptor;
 import static de.dynamicflash.helper.DynamicFlashAppGlideModule.EXTRA_IMAGE_URL_PARAMS;
 import static de.dynamicflash.helper.DynamicFlashAppGlideModule.IMAGE_BASE_URL;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,31 +17,28 @@ import java.util.List;
 import de.dynamicflash.databinding.ImageWithDescriptionBinding;
 import de.dynamicflash.model.Photo;
 
-public class PhotoFullscreenSwipeAdapter extends RecyclerView.Adapter<PhotoFullscreenSwipeAdapter.PhotoFullScreenViewHolder> {
+public class PhotoFullscreenSwipeAdapter extends RecyclerView.Adapter<PhotoFullscreenSwipeAdapter.ViewHolder> {
 
-    private final Context context;
     private final List<Photo> photos;
     private final String folder;
 
     // constructor
-    public PhotoFullscreenSwipeAdapter(Context activity,
-                                       List<Photo> photos,
+    public PhotoFullscreenSwipeAdapter(List<Photo> photos,
                                        String folder) {
-        this.context = activity;
         this.photos = photos;
         this.folder = folder;
     }
 
     @NonNull
     @Override
-    public PhotoFullScreenViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         ImageWithDescriptionBinding binding = ImageWithDescriptionBinding.inflate(inflater, parent, false);
-        return new PhotoFullscreenSwipeAdapter.PhotoFullScreenViewHolder(binding);
+        return new ViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PhotoFullScreenViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Photo photo = photos.get(position);
 
         if (photo.getComment().isEmpty()) {
@@ -55,7 +51,7 @@ public class PhotoFullscreenSwipeAdapter extends RecyclerView.Adapter<PhotoFulls
 
         final String uri = String.format("%s/%s/%s?w=1920&h=1280&fit=inside%s", IMAGE_BASE_URL, folder, photo.getFilename(), EXTRA_IMAGE_URL_PARAMS);
 
-        Glide.with(context)
+        Glide.with(holder.binding.getRoot())
                 .load(uri)
                 .into(holder.binding.image);
     }
@@ -65,10 +61,10 @@ public class PhotoFullscreenSwipeAdapter extends RecyclerView.Adapter<PhotoFulls
         return this.photos.size();
     }
 
-    public static class PhotoFullScreenViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         final ImageWithDescriptionBinding binding;
 
-        public PhotoFullScreenViewHolder(ImageWithDescriptionBinding binding) {
+        public ViewHolder(ImageWithDescriptionBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
