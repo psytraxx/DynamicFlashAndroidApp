@@ -17,7 +17,7 @@
         <activity
             android:name="de.dynamicflash.activity.PhotoFullscreenSwipeActivity"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
 
         <activity
             android:name="de.dynamicflash.activity.MainActivity"

@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.slidingpanelayout.widget.SlidingPaneLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.dynamicflash.R;
@@ -53,7 +52,7 @@ public class GalleryFragment extends Fragment {
         // Observe LiveData from ViewModel
         viewModel.getChildPages("photos", currentPage).observe(getViewLifecycleOwner(), this::updatePageList);
 
-        adapter = new GalleryAdapter(new ArrayList<>());
+        adapter = new GalleryAdapter();
 
         // Set up RecyclerView
         galleryList.setLayoutManager(new LinearLayoutManager(getContext()));

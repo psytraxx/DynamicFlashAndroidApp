@@ -22,10 +22,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
 
     private List<Page> pages;
 
-    public GalleryAdapter(List<Page> list) {
-        pages = list;
-    }
-
     @NonNull
     @Override
     public GalleryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -47,7 +43,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
 
     @Override
     public int getItemCount() {
-        return pages.size();
+        return pages != null ? pages.size() : 0;
     }
 
     public Page getItem(int position) {
