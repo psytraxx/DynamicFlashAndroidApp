@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import com.bumptech.glide.Glide;
 
 import de.dynamicflash.R;
-import de.dynamicflash.databinding.PhotoGridItemBinding;
+import de.dynamicflash.databinding.ImageThumbnailBinding;
 import de.dynamicflash.model.Photo;
 
 public class PhotoListAdapter extends ArrayAdapter<Photo> {
@@ -24,7 +24,7 @@ public class PhotoListAdapter extends ArrayAdapter<Photo> {
 
     public PhotoListAdapter(Context context, String folder) {
 
-        super(context, R.layout.photo_grid_item);
+        super(context, R.layout.image_thumbnail);
         this.folder = folder;
         this.context = context;
     }
@@ -33,14 +33,14 @@ public class PhotoListAdapter extends ArrayAdapter<Photo> {
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        PhotoGridItemBinding binding;
+        ImageThumbnailBinding binding;
 
         if (convertView == null) {
-            binding = PhotoGridItemBinding.inflate(LayoutInflater.from(context), parent, false);
+            binding = ImageThumbnailBinding.inflate(LayoutInflater.from(context), parent, false);
             convertView = binding.getRoot();
             convertView.setTag(binding);
         } else {
-            binding = (PhotoGridItemBinding) convertView.getTag();
+            binding = (ImageThumbnailBinding) convertView.getTag();
         }
 
         // Check position validity before accessing item

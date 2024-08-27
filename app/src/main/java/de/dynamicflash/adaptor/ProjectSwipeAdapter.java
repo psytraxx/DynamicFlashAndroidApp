@@ -4,7 +4,6 @@ import static de.dynamicflash.helper.DynamicFlashAppGlideModule.EXTRA_IMAGE_URL_
 import static de.dynamicflash.helper.DynamicFlashAppGlideModule.IMAGE_BASE_URL;
 
 import android.content.Context;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-import de.dynamicflash.databinding.ProjectItemBinding;
+import de.dynamicflash.databinding.ImageWithDescriptionBinding;
 import de.dynamicflash.model.Page;
 
 /**
@@ -38,7 +37,7 @@ public class ProjectSwipeAdapter extends RecyclerView.Adapter<ProjectSwipeAdapte
     @Override
     public ProjectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        ProjectItemBinding binding = ProjectItemBinding.inflate(inflater, parent, false);
+        ImageWithDescriptionBinding binding = ImageWithDescriptionBinding.inflate(inflater, parent, false);
         return new ProjectViewHolder(binding);
     }
 
@@ -52,7 +51,11 @@ public class ProjectSwipeAdapter extends RecyclerView.Adapter<ProjectSwipeAdapte
             holder.binding.label.setText(project.getTitle());
         }
 
-        holder.binding.description.setText(Html.fromHtml(project.getDescription(), Html.FROM_HTML_MODE_COMPACT));
+        if (project.getDescription().isEmpty()) {
+            holder.binding.description.setVisibility(View.GONE);
+        } else {
+            holder.binding.description.setText(project.getDescription());
+        }
 
         final String uri = String.format("%s/%s?w=1920&h=1280&fit=inside%s", IMAGE_BASE_URL, project.getImage(), EXTRA_IMAGE_URL_PARAMS);
 
@@ -67,9 +70,9 @@ public class ProjectSwipeAdapter extends RecyclerView.Adapter<ProjectSwipeAdapte
     }
 
     public static class ProjectViewHolder extends RecyclerView.ViewHolder {
-        final ProjectItemBinding binding;
+        final ImageWithDescriptionBinding binding;
 
-        public ProjectViewHolder(ProjectItemBinding binding) {
+        public ProjectViewHolder(ImageWithDescriptionBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
