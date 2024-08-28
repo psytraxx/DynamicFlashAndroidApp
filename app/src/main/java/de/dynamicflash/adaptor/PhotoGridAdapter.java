@@ -17,12 +17,12 @@ import de.dynamicflash.R;
 import de.dynamicflash.databinding.ImageThumbnailBinding;
 import de.dynamicflash.model.Photo;
 
-public class PhotoListAdapter extends ArrayAdapter<Photo> {
+public class PhotoGridAdapter extends ArrayAdapter<Photo> {
 
     private final Context context;
     private final String folder;
 
-    public PhotoListAdapter(Context context, String folder) {
+    public PhotoGridAdapter(Context context, String folder) {
 
         super(context, R.layout.image_thumbnail);
         this.folder = folder;

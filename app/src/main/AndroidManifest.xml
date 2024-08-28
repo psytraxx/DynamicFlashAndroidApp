@@ -15,7 +15,7 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
         <activity
-            android:name="de.dynamicflash.activity.PhotoFullscreenSwipeActivity"
+            android:name="de.dynamicflash.activity.PhotoSwipeActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 

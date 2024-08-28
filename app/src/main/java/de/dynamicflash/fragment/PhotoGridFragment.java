@@ -13,8 +13,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import de.dynamicflash.GalleryApplication;
 import de.dynamicflash.R;
-import de.dynamicflash.activity.PhotoFullscreenSwipeActivity;
-import de.dynamicflash.adaptor.PhotoListAdapter;
+import de.dynamicflash.activity.PhotoSwipeActivity;
+import de.dynamicflash.adaptor.PhotoGridAdapter;
 import de.dynamicflash.model.PhotoViewModel;
 
 
@@ -30,12 +30,12 @@ public class PhotoGridFragment extends Fragment {
     private final AdapterView.OnItemClickListener itemClickListener = (parent, v, position, id) -> {
         // on selecting grid view image
         // launch full screen activity
-        Intent i = new Intent(parent.getContext(), PhotoFullscreenSwipeActivity.class);
+        Intent i = new Intent(parent.getContext(), PhotoSwipeActivity.class);
         i.putExtra("position", position);
         i.putExtra("folder", getArguments().getString("folder"));
         startActivity(i);
     };
-    private PhotoListAdapter adapter;
+    private PhotoGridAdapter adapter;
     private PhotoViewModel viewModel;
 
     @Override
@@ -61,7 +61,7 @@ public class PhotoGridFragment extends Fragment {
 
         String folder = getArguments().getString("folder");
         // setting grid view adapter
-        adapter = new PhotoListAdapter(getActivity(), folder);
+        adapter = new PhotoGridAdapter(getActivity(), folder);
         view.setAdapter(adapter);
 
         viewModel.getPhotosByAlbumName(folder).observe(this, photos -> {

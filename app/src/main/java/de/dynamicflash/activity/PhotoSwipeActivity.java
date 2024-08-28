@@ -6,7 +6,7 @@ import android.os.Bundle;
 import java.util.List;
 
 import de.dynamicflash.GalleryApplication;
-import de.dynamicflash.adaptor.PhotoFullscreenSwipeAdapter;
+import de.dynamicflash.adaptor.PhotoSwipeAdapter;
 import de.dynamicflash.databinding.ViewpagerBinding;
 import de.dynamicflash.model.Photo;
 
@@ -16,7 +16,7 @@ import de.dynamicflash.model.Photo;
  * Date: 09/11/13
  * Time: 18:31
  */
-public class PhotoFullscreenSwipeActivity extends Activity {
+public class PhotoSwipeActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class PhotoFullscreenSwipeActivity extends Activity {
 
         // Gridview adapter
         List<Photo> photos = ((GalleryApplication) getApplication()).getCurrentPhotos();
-        PhotoFullscreenSwipeAdapter adapter = new PhotoFullscreenSwipeAdapter(photos, folder);
+        PhotoSwipeAdapter adapter = new PhotoSwipeAdapter(photos, folder);
 
         int position = getIntent().getIntExtra("position", 0);
 

@@ -17,14 +17,14 @@ import java.util.List;
 import de.dynamicflash.databinding.ImageWithDescriptionBinding;
 import de.dynamicflash.model.Photo;
 
-public class PhotoFullscreenSwipeAdapter extends RecyclerView.Adapter<PhotoFullscreenSwipeAdapter.ViewHolder> {
+public class PhotoSwipeAdapter extends RecyclerView.Adapter<PhotoSwipeAdapter.ViewHolder> {
 
     private final List<Photo> photos;
     private final String folder;
 
     // constructor
-    public PhotoFullscreenSwipeAdapter(List<Photo> photos,
-                                       String folder) {
+    public PhotoSwipeAdapter(List<Photo> photos,
+                             String folder) {
         this.photos = photos;
         this.folder = folder;
     }
