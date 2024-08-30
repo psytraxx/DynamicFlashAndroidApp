@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import coil.Coil;
@@ -25,11 +26,7 @@ import de.dynamicflash.model.Page;
  * Time: 4:00 PM
  */
 public class ProjectSwipeAdapter extends RecyclerView.Adapter<ProjectSwipeAdapter.ViewHolder> {
-    private final List<Page> pages;
-
-    public ProjectSwipeAdapter(List<Page> pages) {
-        this.pages = pages;
-    }
+    private final List<Page> pages = new ArrayList<>();
 
     @NonNull
     @Override
@@ -42,33 +39,17 @@ public class ProjectSwipeAdapter extends RecyclerView.Adapter<ProjectSwipeAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Page project = pages.get(position);
-
-        if (project.getTitle().isEmpty()) {
-            holder.binding.label.setVisibility(View.GONE);
-        } else {
-            holder.binding.label.setText(project.getTitle());
-        }
-
-        if (project.getDescription().isEmpty()) {
-            holder.binding.description.setVisibility(View.GONE);
-        } else {
-            holder.binding.description.setText(project.getDescription());
-        }
-
-        final String uri = String.format("%s/%s?w=1920&h=1280&fit=inside%s", IMAGE_BASE_URL, project.getImage(), EXTRA_IMAGE_URL_PARAMS);
-
-        Context context = holder.itemView.getContext();
-        ImageRequest request = new ImageRequest.Builder(context)
-                .data(uri)
-                .target(holder.binding.image)
-                .build();
-
-        Coil.imageLoader(context).enqueue(request);
+        holder.bind(project);
     }
 
     @Override
     public int getItemCount() {
         return pages.size();
+    }
+
+    public void setPages(List<Page> pages) {
+        this.pages.addAll(pages);
+        notifyItemRangeChanged(0, pages.size());
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -77,6 +58,31 @@ public class ProjectSwipeAdapter extends RecyclerView.Adapter<ProjectSwipeAdapte
         public ViewHolder(ImageWithDescriptionBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+        }
+
+        public void bind(Page project) {
+
+            if (project.getTitle().isEmpty()) {
+                binding.label.setVisibility(View.GONE);
+            } else {
+                binding.label.setText(project.getTitle());
+            }
+
+            if (project.getDescription().isEmpty()) {
+                binding.description.setVisibility(View.GONE);
+            } else {
+                binding.description.setText(project.getDescription());
+            }
+
+            final String uri = String.format("%s/%s?w=1920&h=1280&fit=inside%s", IMAGE_BASE_URL, project.getImage(), EXTRA_IMAGE_URL_PARAMS);
+
+            Context context = itemView.getContext();
+            ImageRequest request = new ImageRequest.Builder(context)
+                    .data(uri)
+                    .target(binding.image)
+                    .build();
+
+            Coil.imageLoader(context).enqueue(request);
         }
     }
 }

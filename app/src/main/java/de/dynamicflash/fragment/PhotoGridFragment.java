@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import de.dynamicflash.GalleryApplication;
-import de.dynamicflash.R;
 import de.dynamicflash.activity.PhotoSwipeActivity;
 import de.dynamicflash.adaptor.PhotoGridAdapter;
+import de.dynamicflash.databinding.FragmentPhotoGridBinding;
 import de.dynamicflash.model.PhotoViewModel;
 
 
@@ -29,30 +29,34 @@ import de.dynamicflash.model.PhotoViewModel;
 
 public class PhotoGridFragment extends Fragment implements PhotoGridAdapter.ItemClickListener {
 
-    private PhotoGridAdapter adapter;
-    private RecyclerView recyclerView;
     private String folder;
+    private FragmentPhotoGridBinding binding;
+    private PhotoViewModel viewModel;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Initialize ViewModel
+        viewModel = new ViewModelProvider(this).get(PhotoViewModel.class);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_photo_grid, container, false);
-        recyclerView = view.findViewById(R.id.photo_grid);
+        binding = FragmentPhotoGridBinding.inflate(inflater, container, false);
         folder = getArguments().getString("folder");
-        return view;
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize ViewModel
-        PhotoViewModel viewModel = new ViewModelProvider(this).get(PhotoViewModel.class);
-
-        // Set up RecyclerView
+        //setup recyclerview
+        RecyclerView recyclerView = binding.photoGrid;
         int numberOfColumns = 3;
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), numberOfColumns));
-        adapter = new PhotoGridAdapter(folder);
+        PhotoGridAdapter adapter = new PhotoGridAdapter(folder);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
@@ -71,5 +75,12 @@ public class PhotoGridFragment extends Fragment implements PhotoGridAdapter.Item
         i.putExtra("position", position);
         i.putExtra("folder", folder);
         startActivity(i);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding = null;
+        viewModel = null;
     }
 }

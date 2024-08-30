@@ -41,24 +41,7 @@ public class PhotoSwipeAdapter extends RecyclerView.Adapter<PhotoSwipeAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Photo photo = photos.get(position);
-
-        if (photo.getComment().isEmpty()) {
-            holder.binding.label.setVisibility(View.GONE);
-        } else {
-            holder.binding.label.setText(photo.getComment());
-        }
-
-        holder.binding.description.setVisibility(View.GONE);
-
-        final String uri = String.format("%s/%s/%s?w=1920&h=1280&fit=inside%s", IMAGE_BASE_URL, folder, photo.getFilename(), EXTRA_IMAGE_URL_PARAMS);
-
-        Context context = holder.itemView.getContext();
-        ImageRequest request = new ImageRequest.Builder(context)
-                .data(uri)
-                .target(holder.binding.image)
-                .build();
-
-        Coil.imageLoader(context).enqueue(request);
+        holder.bind(photo, folder);
     }
 
     @Override
@@ -72,6 +55,26 @@ public class PhotoSwipeAdapter extends RecyclerView.Adapter<PhotoSwipeAdapter.Vi
         public ViewHolder(ImageWithDescriptionBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+        }
+
+        public void bind(Photo photo, String folder) {
+            if (photo.getComment().isEmpty()) {
+                binding.label.setVisibility(View.GONE);
+            } else {
+                binding.label.setText(photo.getComment());
+            }
+
+            binding.description.setVisibility(View.GONE);
+
+            final String uri = String.format("%s/%s/%s?w=1920&h=1280&fit=inside%s", IMAGE_BASE_URL, folder, photo.getFilename(), EXTRA_IMAGE_URL_PARAMS);
+
+            Context context = itemView.getContext();
+            ImageRequest request = new ImageRequest.Builder(context)
+                    .data(uri)
+                    .target(binding.image)
+                    .build();
+
+            Coil.imageLoader(context).enqueue(request);
         }
     }
 }

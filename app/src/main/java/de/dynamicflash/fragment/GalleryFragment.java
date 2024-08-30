@@ -17,6 +17,7 @@ import androidx.slidingpanelayout.widget.SlidingPaneLayout;
 
 import de.dynamicflash.R;
 import de.dynamicflash.adaptor.GalleryAdapter;
+import de.dynamicflash.databinding.FragmentGalleryBinding;
 import de.dynamicflash.helper.RecyclerItemClickListener;
 import de.dynamicflash.model.Page;
 import de.dynamicflash.model.PageViewModel;
@@ -29,32 +30,37 @@ import de.dynamicflash.model.PageViewModel;
  */
 public class GalleryFragment extends Fragment {
 
-    private int currentPage = 1;
-    private GalleryAdapter adapter;
     private PageViewModel viewModel;
+    private FragmentGalleryBinding binding;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Initialize ViewModel
+        viewModel = new ViewModelProvider(this).get(PageViewModel.class);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_gallery, container, false);
+        binding = FragmentGalleryBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        RecyclerView galleryList = view.findViewById(R.id.gallery_list);
+        RecyclerView galleryList = binding.galleryList;
 
-        // Initialize ViewModel
-        viewModel = new ViewModelProvider(this).get(PageViewModel.class);
-        // Observe LiveData from ViewModel
-        viewModel.getChildPages("photos", currentPage).observe(getViewLifecycleOwner(), pages -> adapter.setPages(pages));
-
-        adapter = new GalleryAdapter();
-
+        GalleryAdapter adapter = new GalleryAdapter();
         // Set up RecyclerView
-        galleryList.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        galleryList.setLayoutManager(layoutManager);
         galleryList.setAdapter(adapter);
+
+        // Observe LiveData from ViewModel
+        viewModel.loadNextChildPages("photos").observe(getViewLifecycleOwner(), adapter::setPages);
 
         // Set up item click listener
         // Set up item click listener
@@ -63,8 +69,8 @@ public class GalleryFragment extends Fragment {
             public void onItemClick(View view, int position) {
                 Page selection = adapter.getItem(position);
 
-                SlidingPaneLayout slidingPaneLayout = requireActivity().findViewById(R.id.sliding_pane_layout);
-                if (slidingPaneLayout != null && !slidingPaneLayout.isOpen()) {
+                SlidingPaneLayout slidingPaneLayout = binding.slidingPaneLayout;
+                if (!slidingPaneLayout.isOpen()) {
                     slidingPaneLayout.openPane();
                 }
 
@@ -89,13 +95,22 @@ public class GalleryFragment extends Fragment {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                if (layoutManager != null && layoutManager.findLastVisibleItemPosition() >= adapter.getItemCount() - 4) {
-                    currentPage++;
-                    viewModel.getChildPages("photos", currentPage).observe(getViewLifecycleOwner(), pages -> adapter.setPages(pages));
+                int visibleItemCount = layoutManager.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+                if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount &&
+                        firstVisibleItemPosition >= 0) {
+                    viewModel.loadNextChildPages("photos").observe(getViewLifecycleOwner(), adapter::setPages);
                 }
             }
         });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.dynamicflash.helper.ApiImpl;
@@ -14,30 +15,40 @@ import retrofit2.Response;
 
 public class PageViewModel extends ViewModel {
 
-    private final MutableLiveData<List<Page>> pagesLiveData;
+    private int currentPage = 1;
 
-    public PageViewModel() {
-        pagesLiveData = new MutableLiveData<>();
+    private final MutableLiveData<List<Page>> pages = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
+    private boolean hasMorePages = true;
+
+    public LiveData<List<Page>> loadNextChildPages(String pageid) {
+        fetchChildPages(pageid, currentPage);
+        currentPage++;
+        return pages;
     }
 
-    public LiveData<List<Page>> getChildPages(String pageid, Integer page) {
-        fetchChildPages(pageid, page);
-        return pagesLiveData;
+    public LiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 
     private void fetchChildPages(String pageid, Integer page) {
+
+        if (Boolean.TRUE.equals(isLoading.getValue()) || !hasMorePages) return;
+
+        isLoading.setValue(true);
+
         ApiImpl.instance().getChildPages(pageid, page).enqueue(new Callback<PageResult>() {
             @Override
             public void onResponse(@NonNull Call<PageResult> call, @NonNull Response<PageResult> response) {
                 if (response.isSuccessful()) {
                     List<Page> results = response.body().getResults();
-                    List<Page> currentPages = pagesLiveData.getValue();
+                    List<Page> currentPages = pages.getValue();
                     if (currentPages != null) {
                         currentPages.addAll(results);
-                        pagesLiveData.setValue(currentPages);
-                    } else {
-                        pagesLiveData.setValue(results);
+                        pages.postValue(currentPages);
                     }
+                    hasMorePages = !results.isEmpty();
+                    isLoading.setValue(false);
                 }
             }
 

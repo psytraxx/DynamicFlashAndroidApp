@@ -20,10 +20,9 @@ import de.dynamicflash.databinding.FragmentPhotoGridItemBinding;
 import de.dynamicflash.model.Photo;
 
 public class PhotoGridAdapter extends RecyclerView.Adapter<PhotoGridAdapter.ViewHolder> {
-    private ItemClickListener itemClickListener;
-
-    private List<Photo> photos = new ArrayList<>();
     private final String folder;
+    private ItemClickListener itemClickListener;
+    private List<Photo> photos = new ArrayList<>();
 
     public PhotoGridAdapter(String folder) {
         this.folder = folder;
@@ -53,7 +52,17 @@ public class PhotoGridAdapter extends RecyclerView.Adapter<PhotoGridAdapter.View
         notifyItemRangeChanged(0, photos.size());
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {
+    // allows clicks events to be caught
+    public void setClickListener(ItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
+
+    // parent activity/fragment will implement this method to respond to click events
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final FragmentPhotoGridItemBinding binding;
         private final String folder;
@@ -82,15 +91,5 @@ public class PhotoGridAdapter extends RecyclerView.Adapter<PhotoGridAdapter.View
         public void onClick(View v) {
             itemClickListener.onItemClick(v, getBindingAdapterPosition());
         }
-    }
-
-    // allows clicks events to be caught
-    public void setClickListener(ItemClickListener itemClickListener) {
-        this.itemClickListener = itemClickListener;
-    }
-
-    // parent activity/fragment will implement this method to respond to click events
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
     }
 }

@@ -22,13 +22,12 @@ import de.dynamicflash.model.PageViewModel;
  */
 public class ProjectFragment extends Fragment {
 
-    private PageViewModel viewModel;
     private ViewpagerBinding binding;
+    private PageViewModel viewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Initialize ViewModel
         viewModel = new ViewModelProvider(this).get(PageViewModel.class);
     }
 
@@ -45,15 +44,15 @@ public class ProjectFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Observe LiveData from ViewModel
-        viewModel.getChildPages("projects", 1).observe(getViewLifecycleOwner(), pages -> {
-            ProjectSwipeAdapter adapter = new ProjectSwipeAdapter(pages);
-            binding.pager.setAdapter(adapter);
-        });
+        ProjectSwipeAdapter adapter = new ProjectSwipeAdapter();
+        binding.pager.setAdapter(adapter);
+        viewModel.loadNextChildPages("projects").observe(getViewLifecycleOwner(), adapter::setPages);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         binding = null;
+        viewModel = null;
     }
 }

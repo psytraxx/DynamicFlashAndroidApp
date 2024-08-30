@@ -9,17 +9,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.dynamicflash.R;
 import de.dynamicflash.adaptor.DrawerAdapter;
+import de.dynamicflash.databinding.ActivityMainBinding;
 import de.dynamicflash.fragment.GalleryFragment;
 import de.dynamicflash.fragment.ProjectFragment;
 import de.dynamicflash.helper.RecyclerItemClickListener;
@@ -30,31 +29,30 @@ import de.dynamicflash.helper.RecyclerItemClickListener;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView drawerRecyclerView;
-    private DrawerLayout drawerLayout;
+    private final List<String> drawerEntries = new ArrayList<>();
     private ActionBarDrawerToggle drawerToggle;
     private CharSequence drawerTitle;
     private CharSequence title;
-
-    private final List<String> drawerEntries = new ArrayList<>();
+    private ActivityMainBinding binding;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
+        this.binding = binding;
+        setContentView(binding.getRoot());
 
         drawerEntries.add(getString(R.string.title_photos));
         drawerEntries.add(getString(R.string.title_projects));
 
-        drawerLayout = findViewById(R.id.drawer_layout);
-        drawerRecyclerView = findViewById(R.id.left_drawer);
-        drawerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        binding.leftDrawer.setLayoutManager(new LinearLayoutManager(this));
 
         // Set the adapter for the list view
-        drawerRecyclerView.setAdapter(new DrawerAdapter(drawerEntries));
+        binding.leftDrawer.setAdapter(new DrawerAdapter(drawerEntries));
         // Set the list's click listener
-        drawerRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, drawerRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+        binding.leftDrawer.addOnItemTouchListener(new RecyclerItemClickListener(this, binding.leftDrawer, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 selectItem(position);
@@ -78,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         // between the sliding drawer and the action bar app icon
         drawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
-                drawerLayout,         /* DrawerLayout object */
+                binding.drawerLayout,         /* DrawerLayout object */
                 R.string.drawer_open,  /* "open drawer" description for accessibility */
                 R.string.drawer_close  /* "close drawer" description for accessibility */
         ) {
@@ -93,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        drawerLayout.addDrawerListener(drawerToggle);
+        binding.drawerLayout.addDrawerListener(drawerToggle);
 
         if (savedInstanceState == null) {
             selectItem(0);
@@ -119,9 +117,9 @@ public class MainActivity extends AppCompatActivity {
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
             // update selected item and title, then close the drawer
-            drawerRecyclerView.setSelected(true);
+            binding.leftDrawer.setSelected(true);
             setTitle(drawerEntries.get(position));
-            drawerLayout.closeDrawer(drawerRecyclerView);
+            binding.drawerLayout.closeDrawer(binding.leftDrawer);
         }
     }
 
@@ -157,5 +155,11 @@ public class MainActivity extends AppCompatActivity {
         // Handle your other action bar items...
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }
