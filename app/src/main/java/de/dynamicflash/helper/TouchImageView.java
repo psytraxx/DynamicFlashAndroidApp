@@ -209,8 +209,8 @@ public class TouchImageView extends AppCompatImageView {
 
             if (origWidth * saveScale <= viewWidth
                     || origHeight * saveScale <= viewHeight)
-                matrix.postScale(mScaleFactor, mScaleFactor, viewWidth / 2,
-                        viewHeight / 2);
+                matrix.postScale(mScaleFactor, mScaleFactor, (float) viewWidth / 2,
+                        (float) viewHeight / 2);
             else
                 matrix.postScale(mScaleFactor, mScaleFactor,
                         detector.getFocusX(), detector.getFocusY());

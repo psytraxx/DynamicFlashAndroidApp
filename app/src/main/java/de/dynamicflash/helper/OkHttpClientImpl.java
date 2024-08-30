@@ -13,6 +13,7 @@ public final class OkHttpClientImpl {
             client = new OkHttpClient.Builder()
                     .followRedirects(true)
                     .addInterceptor(new LoggingInterceptor())
+                    .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
                     .protocols(Arrays.asList(Protocol.HTTP_1_1, Protocol.HTTP_2, Protocol.QUIC))
                     .build();
 

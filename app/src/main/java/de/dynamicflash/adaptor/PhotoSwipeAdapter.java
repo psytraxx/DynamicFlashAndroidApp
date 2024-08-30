@@ -1,8 +1,9 @@
 package de.dynamicflash.adaptor;
 
-import static de.dynamicflash.helper.DynamicFlashAppGlideModule.EXTRA_IMAGE_URL_PARAMS;
-import static de.dynamicflash.helper.DynamicFlashAppGlideModule.IMAGE_BASE_URL;
+import static de.dynamicflash.GalleryApplication.EXTRA_IMAGE_URL_PARAMS;
+import static de.dynamicflash.GalleryApplication.IMAGE_BASE_URL;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +11,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.List;
 
+import coil.Coil;
+import coil.request.ImageRequest;
 import de.dynamicflash.databinding.ImageWithDescriptionBinding;
 import de.dynamicflash.model.Photo;
 
@@ -51,9 +52,13 @@ public class PhotoSwipeAdapter extends RecyclerView.Adapter<PhotoSwipeAdapter.Vi
 
         final String uri = String.format("%s/%s/%s?w=1920&h=1280&fit=inside%s", IMAGE_BASE_URL, folder, photo.getFilename(), EXTRA_IMAGE_URL_PARAMS);
 
-        Glide.with(holder.binding.getRoot())
-                .load(uri)
-                .into(holder.binding.image);
+        Context context = holder.itemView.getContext();
+        ImageRequest request = new ImageRequest.Builder(context)
+                .data(uri)
+                .target(holder.binding.image)
+                .build();
+
+        Coil.imageLoader(context).enqueue(request);
     }
 
     @Override

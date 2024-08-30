@@ -1,7 +1,7 @@
 package de.dynamicflash.adaptor;
 
-import static de.dynamicflash.helper.DynamicFlashAppGlideModule.EXTRA_IMAGE_URL_PARAMS;
-import static de.dynamicflash.helper.DynamicFlashAppGlideModule.IMAGE_BASE_URL;
+import static de.dynamicflash.GalleryApplication.EXTRA_IMAGE_URL_PARAMS;
+import static de.dynamicflash.GalleryApplication.IMAGE_BASE_URL;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,8 +11,8 @@ import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 
-import com.bumptech.glide.Glide;
-
+import coil.Coil;
+import coil.request.ImageRequest;
 import de.dynamicflash.R;
 import de.dynamicflash.databinding.ImageThumbnailBinding;
 import de.dynamicflash.model.Photo;
@@ -47,11 +47,14 @@ public class PhotoGridAdapter extends ArrayAdapter<Photo> {
         if (position >= 0 && position < getCount()) {
             Photo item = getItem(position);
             if (item != null) { // Null check for item
-                final String uri = String.format("%s/%s/%s?w=1920&h=1280&fit=inside%s", IMAGE_BASE_URL, folder, item.getFilename(), EXTRA_IMAGE_URL_PARAMS);
+                final String uri = String.format("%s/%s/%s?w=320&h=240&fit=inside%s", IMAGE_BASE_URL, folder, item.getFilename(), EXTRA_IMAGE_URL_PARAMS);
 
-                Glide.with(context)
-                        .load(uri)
-                        .into(binding.image);
+                ImageRequest request = new ImageRequest.Builder(context)
+                        .data(uri)
+                        .target(binding.image)
+                        .build();
+
+                Coil.imageLoader(context).enqueue(request);
             }
         }
 
