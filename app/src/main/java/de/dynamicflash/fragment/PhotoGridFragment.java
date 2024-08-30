@@ -5,11 +5,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import de.dynamicflash.GalleryApplication;
 import de.dynamicflash.R;
@@ -25,49 +27,49 @@ import de.dynamicflash.model.PhotoViewModel;
  * Time: 18:29
  */
 
-public class PhotoGridFragment extends Fragment {
+public class PhotoGridFragment extends Fragment implements PhotoGridAdapter.ItemClickListener {
 
-    private final AdapterView.OnItemClickListener itemClickListener = (parent, v, position, id) -> {
-        // on selecting grid view image
-        // launch full screen activity
-        Intent i = new Intent(parent.getContext(), PhotoSwipeActivity.class);
-        i.putExtra("position", position);
-        i.putExtra("folder", getArguments().getString("folder"));
-        startActivity(i);
-    };
     private PhotoGridAdapter adapter;
-    private PhotoViewModel viewModel;
+    private RecyclerView recyclerView;
+    private String folder;
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        // Initialize ViewModel
-        viewModel = new ViewModelProvider(this).get(PhotoViewModel.class);
-
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_photo_grid, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_photo_grid, container, false);
+        recyclerView = view.findViewById(R.id.photo_grid);
+        folder = getArguments().getString("folder");
+        return view;
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        GridView view = (GridView) getView();
-        if (view == null) {
-            return;
-        }
-        view.setOnItemClickListener(itemClickListener);
+        // Initialize ViewModel
+        PhotoViewModel viewModel = new ViewModelProvider(this).get(PhotoViewModel.class);
 
-        String folder = getArguments().getString("folder");
-        // setting grid view adapter
-        adapter = new PhotoGridAdapter(getActivity(), folder);
-        view.setAdapter(adapter);
+        // Set up RecyclerView
+        int numberOfColumns = 3;
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), numberOfColumns));
+        adapter = new PhotoGridAdapter(folder);
+        adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
 
-        viewModel.getPhotosByAlbumName(folder).observe(this, photos -> {
+        // Observe ViewModel data changes
+        viewModel.getPhotosByAlbumName(folder).observe(getViewLifecycleOwner(), photos -> {
             final GalleryApplication application = (GalleryApplication) getActivity().getApplication();
+            // Update RecyclerView when data changes
             application.setCurrentPhotos(photos);
             adapter.addAll(photos);
         });
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Intent i = new Intent(getContext(), PhotoSwipeActivity.class);
+        i.putExtra("position", position);
+        i.putExtra("folder", folder);
+        startActivity(i);
     }
 }
